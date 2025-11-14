@@ -6,8 +6,9 @@ import { buildConfig } from "payload";
 import { en } from "payload/i18n/en";
 import { fr } from "payload/i18n/fr";
 
-import { postgresAdapter } from "@payloadcms/db-postgres";
+import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -57,13 +58,18 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI || "",
-    },
+  db: mongooseAdapter({
+    url: process.env.MONGODB_URI || "",
   }),
   sharp,
   plugins: [
-    // storage-adapter-placeholder
+    vercelBlobStorage({
+      enabled: true,
+      clientUploads: true,
+      token: process.env.BLOB_READ_WRITE_TOKEN || "",
+      collections: {
+        media: true,
+      },
+    }),
   ],
 });

@@ -106,7 +106,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {};
   globalsSelect: {};
@@ -142,7 +142,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -166,7 +166,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -185,10 +185,10 @@ export interface Media {
  * via the `definition` "team-groups".
  */
 export interface TeamGroup {
-  id: number;
+  id: string;
   name: string;
   description?: string | null;
-  icon?: (number | null) | Media;
+  icon?: (string | null) | Media;
   order: number;
   updatedAt: string;
   createdAt: string;
@@ -198,8 +198,8 @@ export interface TeamGroup {
  * via the `definition` "team-items".
  */
 export interface TeamItem {
-  id: number;
-  category: number | TeamGroup;
+  id: string;
+  category: string | TeamGroup;
   name: string;
   role: string;
   bio?: {
@@ -217,7 +217,7 @@ export interface TeamItem {
     };
     [k: string]: unknown;
   } | null;
-  photo?: (number | null) | Media;
+  photo?: (string | null) | Media;
   email?: string | null;
   phone?: string | null;
   linkedin?: string | null;
@@ -233,7 +233,7 @@ export interface TeamItem {
  * via the `definition` "events".
  */
 export interface Event {
-  id: number;
+  id: string;
   title: string;
   description: {
     root: {
@@ -251,7 +251,7 @@ export interface Event {
     [k: string]: unknown;
   };
   location: string;
-  image?: (number | null) | Media;
+  image?: (string | null) | Media;
   date: string;
   endDate?: string | null;
   virtualLink?: string | null;
@@ -264,7 +264,7 @@ export interface Event {
  * via the `definition` "job-offers".
  */
 export interface JobOffer {
-  id: number;
+  id: string;
   title: string;
   location: string;
   description: {
@@ -308,11 +308,11 @@ export interface JobOffer {
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
-  id: number;
+  id: string;
   client: string;
   company?: string | null;
   quote: string;
-  photo?: (number | null) | Media;
+  photo?: (string | null) | Media;
   rating?: number | null;
   date: string;
   updatedAt: string;
@@ -323,7 +323,7 @@ export interface Testimonial {
  * via the `definition` "press-releases".
  */
 export interface PressRelease {
-  id: number;
+  id: string;
   title: string;
   journal?: string | null;
   excerpt?: {
@@ -351,10 +351,10 @@ export interface PressRelease {
  * via the `definition` "faq-groups".
  */
 export interface FaqGroup {
-  id: number;
+  id: string;
   name: string;
   description?: string | null;
-  icon?: (number | null) | Media;
+  icon?: (string | null) | Media;
   order: number;
   updatedAt: string;
   createdAt: string;
@@ -364,8 +364,8 @@ export interface FaqGroup {
  * via the `definition` "faq-items".
  */
 export interface FaqItem {
-  id: number;
-  category: number | FaqGroup;
+  id: string;
+  category: string | FaqGroup;
   question: string;
   answer: {
     root: {
@@ -391,10 +391,10 @@ export interface FaqItem {
  * via the `definition` "blog-categories".
  */
 export interface BlogCategory {
-  id: number;
+  id: string;
   name: string;
   description?: string | null;
-  icon?: (number | null) | Media;
+  icon?: (string | null) | Media;
   slug: string;
   order: number;
   updatedAt: string;
@@ -405,10 +405,10 @@ export interface BlogCategory {
  * via the `definition` "blog-authors".
  */
 export interface BlogAuthor {
-  id: number;
+  id: string;
   name: string;
   description?: string | null;
-  icon?: (number | null) | Media;
+  icon?: (string | null) | Media;
   slug: string;
   order: number;
   updatedAt: string;
@@ -419,10 +419,10 @@ export interface BlogAuthor {
  * via the `definition` "blog-posts".
  */
 export interface BlogPost {
-  id: number;
-  category: number | BlogCategory;
+  id: string;
+  category: string | BlogCategory;
   title: string;
-  featuredImage?: (number | null) | Media;
+  featuredImage?: (string | null) | Media;
   excerpt?: string | null;
   content: {
     root: {
@@ -439,7 +439,7 @@ export interface BlogPost {
     };
     [k: string]: unknown;
   };
-  author: number | BlogAuthor;
+  author: string | BlogAuthor;
   tags?:
     | {
         tag?: string | null;
@@ -458,7 +458,7 @@ export interface BlogPost {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -475,64 +475,64 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'team-groups';
-        value: number | TeamGroup;
+        value: string | TeamGroup;
       } | null)
     | ({
         relationTo: 'team-items';
-        value: number | TeamItem;
+        value: string | TeamItem;
       } | null)
     | ({
         relationTo: 'events';
-        value: number | Event;
+        value: string | Event;
       } | null)
     | ({
         relationTo: 'job-offers';
-        value: number | JobOffer;
+        value: string | JobOffer;
       } | null)
     | ({
         relationTo: 'testimonials';
-        value: number | Testimonial;
+        value: string | Testimonial;
       } | null)
     | ({
         relationTo: 'press-releases';
-        value: number | PressRelease;
+        value: string | PressRelease;
       } | null)
     | ({
         relationTo: 'faq-groups';
-        value: number | FaqGroup;
+        value: string | FaqGroup;
       } | null)
     | ({
         relationTo: 'faq-items';
-        value: number | FaqItem;
+        value: string | FaqItem;
       } | null)
     | ({
         relationTo: 'blog-categories';
-        value: number | BlogCategory;
+        value: string | BlogCategory;
       } | null)
     | ({
         relationTo: 'blog-authors';
-        value: number | BlogAuthor;
+        value: string | BlogAuthor;
       } | null)
     | ({
         relationTo: 'blog-posts';
-        value: number | BlogPost;
+        value: string | BlogPost;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -542,10 +542,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -565,7 +565,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
