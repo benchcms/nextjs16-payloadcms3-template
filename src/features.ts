@@ -14,6 +14,7 @@ import { PressReleases } from "./collections/PressReleases";
 import { BlogPosts } from "./collections/BlogPosts";
 import { BlogAuthors } from "./collections/BlogAuthors";
 import { BlogCategories } from "./collections/BlogCategories";
+import { ContactEmails } from "./collections/ContactEmails";
 
 export const globals = [
     CompanyInfo,
@@ -35,4 +36,5 @@ export const collections = [
     BlogPosts,
     BlogAuthors,
     BlogCategories,
+    ContactEmails,
 ];

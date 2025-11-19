@@ -80,6 +80,7 @@ export interface Config {
     'blog-posts': BlogPost;
     'blog-authors': BlogAuthor;
     'blog-categories': BlogCategory;
+    'contact-emails': ContactEmail;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -100,6 +101,7 @@ export interface Config {
     'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'blog-authors': BlogAuthorsSelect<false> | BlogAuthorsSelect<true>;
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
+    'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -463,6 +465,21 @@ export interface BlogAuthor {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails".
+ */
+export interface ContactEmail {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  submittedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -536,6 +553,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blog-categories';
         value: number | BlogCategory;
+      } | null)
+    | ({
+        relationTo: 'contact-emails';
+        value: number | ContactEmail;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -780,6 +801,20 @@ export interface BlogCategoriesSelect<T extends boolean = true> {
   icon?: T;
   slug?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails_select".
+ */
+export interface ContactEmailsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  submittedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

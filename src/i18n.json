@@ -815,6 +815,44 @@
           "fr": "Date"
         }
       }
+    },
+    "contactEmails": {
+      "labels": {
+        "singular": {
+          "en": "Contact Email",
+          "fr": "Email de contact"
+        },
+        "plural": {
+          "en": "Contact Emails",
+          "fr": "Emails de contact"
+        }
+      },
+      "fields": {
+        "name": {
+          "en": "Name",
+          "fr": "Nom"
+        },
+        "email": {
+          "en": "Email",
+          "fr": "Email"
+        },
+        "phone": {
+          "en": "Phone",
+          "fr": "Téléphone"
+        },
+        "subject": {
+          "en": "Subject",
+          "fr": "Sujet"
+        },
+        "message": {
+          "en": "Message",
+          "fr": "Message"
+        },
+        "submittedAt": {
+          "en": "Submitted At",
+          "fr": "Soumis le"
+        }
+      }
     }
   }
 }
