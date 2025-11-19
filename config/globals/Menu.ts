@@ -4,10 +4,11 @@ import i18n from "../i18n.json";
 
 export const Menu: GlobalConfig = {
     slug: "menu",
-    label: i18n.globals.menu.label,
     access: {
         read: () => true,
     },
+    endpoints: false,
+    label: i18n.globals.menu.label,
     fields: [
         {
             name: "pdf",

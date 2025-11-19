@@ -23,10 +23,11 @@ const dayFields: Field[] = [
 
 export const OpeningHours: GlobalConfig = {
     slug: "opening-hours",
-    label: i18n.globals.openingHours.label,
     access: {
         read: () => true,
     },
+    endpoints: false,
+    label: i18n.globals.openingHours.label,
     fields: [
         {
             name: "monday",

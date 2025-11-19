@@ -4,12 +4,13 @@ import i18n from "../i18n.json";
 
 export const Media: CollectionConfig = {
   slug: "media",
+  access: {
+    read: () => true,
+  },
+  endpoints: false,
   labels: {
     singular: i18n.collections.media.labels.singular,
     plural: i18n.collections.media.labels.plural,
-  },
-  access: {
-    read: () => true,
   },
   fields: [
     {

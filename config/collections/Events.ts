@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const Events: CollectionConfig = {
   slug: "events",
-  labels: {
-    singular: i18n.collections.events.labels.singular,
-    plural: i18n.collections.events.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "location", "date"],
+  },
+  labels: {
+    singular: i18n.collections.events.labels.singular,
+    plural: i18n.collections.events.labels.plural,
   },
   fields: [
     {

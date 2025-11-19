@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const TeamItems: CollectionConfig = {
   slug: "team-items",
-  labels: {
-    singular: i18n.collections.teamItems.labels.singular,
-    plural: i18n.collections.teamItems.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "name",
     defaultColumns: ["name", "role", "order"],
+  },
+  labels: {
+    singular: i18n.collections.teamItems.labels.singular,
+    plural: i18n.collections.teamItems.labels.plural,
   },
   fields: [
     {

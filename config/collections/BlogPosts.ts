@@ -5,13 +5,17 @@ import { SlugField } from "../fields/SlugField";
 
 export const BlogPosts: CollectionConfig = {
   slug: "blog-posts",
-  labels: {
-    singular: i18n.collections.blogPosts.labels.singular,
-    plural: i18n.collections.blogPosts.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "author", "publishedDate"],
+  },
+  labels: {
+    singular: i18n.collections.blogPosts.labels.singular,
+    plural: i18n.collections.blogPosts.labels.plural,
   },
   fields: [
     {

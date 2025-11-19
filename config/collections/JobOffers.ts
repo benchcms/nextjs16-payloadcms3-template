@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const JobOffers: CollectionConfig = {
   slug: "job-offers",
-  labels: {
-    singular: i18n.collections.jobOffers.labels.singular,
-    plural: i18n.collections.jobOffers.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "location", "active", "postedDate"],
+  },
+  labels: {
+    singular: i18n.collections.jobOffers.labels.singular,
+    plural: i18n.collections.jobOffers.labels.plural,
   },
   fields: [
     {

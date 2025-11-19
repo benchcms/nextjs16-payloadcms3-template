@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const FAQGroups: CollectionConfig = {
   slug: "faq-groups",
-  labels: {
-    singular: i18n.collections.faqGroups.labels.singular,
-    plural: i18n.collections.faqGroups.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "name",
     defaultColumns: ["name", "order"],
+  },
+  labels: {
+    singular: i18n.collections.faqGroups.labels.singular,
+    plural: i18n.collections.faqGroups.labels.plural,
   },
   fields: [
     {

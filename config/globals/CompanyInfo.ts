@@ -4,10 +4,11 @@ import i18n from "../i18n.json";
 
 export const CompanyInfo: GlobalConfig = {
   slug: "company-info",
-  label: i18n.globals.companyInfo.label,
   access: {
     read: () => true,
   },
+  endpoints: false,
+  label: i18n.globals.companyInfo.label,
   fields: [
     {
       name: "description",

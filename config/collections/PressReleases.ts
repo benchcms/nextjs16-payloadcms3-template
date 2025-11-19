@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const PressReleases: CollectionConfig = {
   slug: "press-releases",
-  labels: {
-    singular: i18n.collections.pressReleases.labels.singular,
-    plural: i18n.collections.pressReleases.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "publishedDate"],
+  },
+  labels: {
+    singular: i18n.collections.pressReleases.labels.singular,
+    plural: i18n.collections.pressReleases.labels.plural,
   },
   fields: [
     {

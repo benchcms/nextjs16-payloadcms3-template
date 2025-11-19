@@ -4,13 +4,17 @@ import i18n from "../i18n.json";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
-  labels: {
-    singular: i18n.collections.testimonials.labels.singular,
-    plural: i18n.collections.testimonials.labels.plural,
+  access: {
+    read: () => true,
   },
+  endpoints: false,
   admin: {
     useAsTitle: "client",
     defaultColumns: ["client", "rating", "date"],
+  },
+  labels: {
+    singular: i18n.collections.testimonials.labels.singular,
+    plural: i18n.collections.testimonials.labels.plural,
   },
   fields: [
     {
