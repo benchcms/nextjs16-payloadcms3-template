@@ -1,8 +1,37 @@
 import { Payload } from "payload";
 import { faker } from "@faker-js/faker";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function seedRestaurantMenu(payload: Payload) {
   console.log("🌱 Seeding restaurant menu...");
+
+  const seedAsset = async (fileName: string, alt: string) => {
+    const filePath = path.join(__dirname, "assets", fileName);
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Warning: Seed asset not found at ${filePath}`);
+      return null;
+    }
+
+    const fileBuffer = fs.readFileSync(filePath);
+
+    return await payload.create({
+      collection: "media",
+      data: { alt },
+      file: {
+        data: fileBuffer,
+        name: fileName,
+        mimetype: "image/png",
+        size: fileBuffer.length,
+      },
+    });
+  };
+
+  const menuItemImage = await seedAsset("menu-item-placeholder.png", "Menu Item Placeholder");
 
   const categories = ["Appetizers", "Main Courses", "Desserts", "Beverages"];
   const spicyLevels = ["none", "mild", "medium", "hot", "extra-hot"] as const;
@@ -20,6 +49,7 @@ export async function seedRestaurantMenu(payload: Payload) {
             name: faker.food.dish(),
             description: faker.food.description(),
             price: faker.number.float({ min: 5, max: 50, fractionDigits: 2 }),
+            image: menuItemImage?.id,
             dietary: faker.helpers.maybe(() =>
               faker.helpers.arrayElement([
                 "Vegan",
@@ -35,6 +65,6 @@ export async function seedRestaurantMenu(payload: Payload) {
     });
   }
 
-  console.log(`  ✓ Created ${categories.length} menu categories`);
+  console.log("  ✓ Created 5 menu categories with 5 items each");
   console.log("✅ Restaurant menu seeded");
 }

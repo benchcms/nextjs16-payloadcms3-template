@@ -1,5 +1,7 @@
 import { config } from "@/config";
 import { Payload, GlobalConfig, CollectionConfig } from "payload";
+import MediaFeature from "./media";
+import UsersFeature from "./users";
 
 type Seed = (payload: Payload) => Promise<void>;
 
@@ -9,6 +11,9 @@ export type Feature = {
   seeds: Seed[];
 };
 
-export const globals = config.flatMap((f) => f.globals)
-export const collections = config.flatMap((f) => f.collections)
-export const seeds = config.flatMap((f) => f.seeds)
+const mandatoryFeatures = [MediaFeature, UsersFeature];
+const allFeatures = [...mandatoryFeatures, ...config];
+
+export const globals = allFeatures.flatMap((f) => f.globals)
+export const collections = allFeatures.flatMap((f) => f.collections)
+export const seeds = allFeatures.flatMap((f) => f.seeds)

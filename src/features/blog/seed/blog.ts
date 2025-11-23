@@ -1,9 +1,40 @@
 import { Payload } from "payload";
 import { faker } from "@faker-js/faker";
 import { createRichTextParagraphs } from "@/src/utils/lexical";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function seedBlog(payload: Payload) {
   console.log("🌱 Seeding blog...");
+
+  const seedAsset = async (fileName: string, alt: string) => {
+    const filePath = path.join(__dirname, "assets", fileName);
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Warning: Seed asset not found at ${filePath}`);
+      return null;
+    }
+
+    const fileBuffer = fs.readFileSync(filePath);
+
+    return await payload.create({
+      collection: "media",
+      data: { alt },
+      file: {
+        data: fileBuffer,
+        name: fileName,
+        mimetype: "image/png",
+        size: fileBuffer.length,
+      },
+    });
+  };
+
+  const categoryImage = await seedAsset("blog-category-placeholder.png", "Blog Category Placeholder");
+  const authorImage = await seedAsset("blog-author-placeholder.png", "Blog Author Placeholder");
+  const postImage = await seedAsset("blog-post-placeholder.png", "Blog Post Placeholder");
 
   // Create categories
   const categories = [];
@@ -16,6 +47,7 @@ export async function seedBlog(payload: Payload) {
         description: faker.lorem.sentence(),
         slug: faker.helpers.slugify(name).toLowerCase(),
         order: i,
+        icon: categoryImage?.id,
       },
     });
     categories.push(category);
@@ -33,6 +65,7 @@ export async function seedBlog(payload: Payload) {
         description: faker.person.bio(),
         slug: faker.helpers.slugify(name).toLowerCase(),
         order: i,
+        icon: authorImage?.id,
       },
     });
     authors.push(author);
@@ -54,6 +87,7 @@ export async function seedBlog(payload: Payload) {
         publishedDate: faker.date.past().toISOString(),
         author: faker.helpers.arrayElement(authors).id,
         category: faker.helpers.arrayElement(categories).id,
+        featuredImage: postImage?.id,
         tags: faker.helpers.maybe(() =>
           Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
             tag: faker.word.noun(),
