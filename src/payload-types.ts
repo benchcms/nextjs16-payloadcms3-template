@@ -67,19 +67,19 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
-    team: Team;
-    events: Event;
-    'job-offers': JobOffer;
-    testimonials: Testimonial;
-    'press-releases': PressRelease;
-    faq: Faq;
-    'blog-posts': BlogPost;
-    'blog-authors': BlogAuthor;
     'blog-categories': BlogCategory;
+    'blog-authors': BlogAuthor;
+    'blog-posts': BlogPost;
     'contact-emails': ContactEmail;
+    events: Event;
+    faq: Faq;
+    'job-offers': JobOffer;
+    media: Media;
+    'press-releases': PressRelease;
     'restaurant-menu': RestaurantMenu;
+    team: Team;
+    testimonials: Testimonial;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -87,19 +87,19 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    team: TeamSelect<false> | TeamSelect<true>;
-    events: EventsSelect<false> | EventsSelect<true>;
-    'job-offers': JobOffersSelect<false> | JobOffersSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    'press-releases': PressReleasesSelect<false> | PressReleasesSelect<true>;
-    faq: FaqSelect<false> | FaqSelect<true>;
-    'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
-    'blog-authors': BlogAuthorsSelect<false> | BlogAuthorsSelect<true>;
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
+    'blog-authors': BlogAuthorsSelect<false> | BlogAuthorsSelect<true>;
+    'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    faq: FaqSelect<false> | FaqSelect<true>;
+    'job-offers': JobOffersSelect<false> | JobOffersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    'press-releases': PressReleasesSelect<false> | PressReleasesSelect<true>;
     'restaurant-menu': RestaurantMenuSelect<false> | RestaurantMenuSelect<true>;
+    team: TeamSelect<false> | TeamSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -109,12 +109,12 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
-    settings: Setting;
     'opening-hours': OpeningHour;
+    settings: Setting;
   };
   globalsSelect: {
-    settings: SettingsSelect<false> | SettingsSelect<true>;
     'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -145,27 +145,17 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "blog-categories".
  */
-export interface User {
+export interface BlogCategory {
   id: number;
+  name: string;
+  description?: string | null;
+  icon?: (number | null) | Media;
+  slug: string;
+  order: number;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -188,28 +178,69 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team".
+ * via the `definition` "blog-authors".
  */
-export interface Team {
+export interface BlogAuthor {
   id: number;
   name: string;
-  items?:
+  description?: string | null;
+  icon?: (number | null) | Media;
+  slug: string;
+  order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts".
+ */
+export interface BlogPost {
+  id: number;
+  category: number | BlogCategory;
+  title: string;
+  featuredImage?: (number | null) | Media;
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  author: number | BlogAuthor;
+  tags?:
     | {
-        name: string;
-        role: string;
-        bio?: string | null;
-        photo?: (number | null) | Media;
-        email?: string | null;
-        phone?: string | null;
-        linkedin?: string | null;
-        twitter?: string | null;
-        facebook?: string | null;
-        instagram?: string | null;
+        tag?: string | null;
         id?: string | null;
       }[]
     | null;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
   slug: string;
-  order: number;
+  publishedDate: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails".
+ */
+export interface ContactEmail {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  submittedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -241,6 +272,39 @@ export interface Event {
   endDate?: string | null;
   virtualLink?: string | null;
   registrationLink?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq".
+ */
+export interface Faq {
+  id: number;
+  name: string;
+  items?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  slug: string;
+  order: number;
   updatedAt: string;
   createdAt: string;
 }
@@ -290,21 +354,6 @@ export interface JobOffer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
- */
-export interface Testimonial {
-  id: number;
-  client: string;
-  company?: string | null;
-  quote: string;
-  photo?: (number | null) | Media;
-  rating?: number | null;
-  date: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "press-releases".
  */
 export interface PressRelease {
@@ -333,121 +382,6 @@ export interface PressRelease {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faq".
- */
-export interface Faq {
-  id: number;
-  name: string;
-  items?:
-    | {
-        question: string;
-        answer: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  slug: string;
-  order: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-posts".
- */
-export interface BlogPost {
-  id: number;
-  category: number | BlogCategory;
-  title: string;
-  featuredImage?: (number | null) | Media;
-  excerpt?: string | null;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  author: number | BlogAuthor;
-  tags?:
-    | {
-        tag?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  metaTitle?: string | null;
-  metaDescription?: string | null;
-  slug: string;
-  publishedDate: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-categories".
- */
-export interface BlogCategory {
-  id: number;
-  name: string;
-  description?: string | null;
-  icon?: (number | null) | Media;
-  slug: string;
-  order: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-authors".
- */
-export interface BlogAuthor {
-  id: number;
-  name: string;
-  description?: string | null;
-  icon?: (number | null) | Media;
-  slug: string;
-  order: number;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-emails".
- */
-export interface ContactEmail {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string | null;
-  subject: string;
-  message: string;
-  submittedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "restaurant-menu".
  */
 export interface RestaurantMenu {
@@ -468,6 +402,72 @@ export interface RestaurantMenu {
   order: number;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team".
+ */
+export interface Team {
+  id: number;
+  name: string;
+  items?:
+    | {
+        name: string;
+        role: string;
+        bio?: string | null;
+        photo?: (number | null) | Media;
+        email?: string | null;
+        phone?: string | null;
+        linkedin?: string | null;
+        twitter?: string | null;
+        facebook?: string | null;
+        instagram?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  slug: string;
+  order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  client: string;
+  company?: string | null;
+  quote: string;
+  photo?: (number | null) | Media;
+  rating?: number | null;
+  date: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -494,56 +494,56 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'team';
-        value: number | Team;
-      } | null)
-    | ({
-        relationTo: 'events';
-        value: number | Event;
-      } | null)
-    | ({
-        relationTo: 'job-offers';
-        value: number | JobOffer;
-      } | null)
-    | ({
-        relationTo: 'testimonials';
-        value: number | Testimonial;
-      } | null)
-    | ({
-        relationTo: 'press-releases';
-        value: number | PressRelease;
-      } | null)
-    | ({
-        relationTo: 'faq';
-        value: number | Faq;
-      } | null)
-    | ({
-        relationTo: 'blog-posts';
-        value: number | BlogPost;
+        relationTo: 'blog-categories';
+        value: number | BlogCategory;
       } | null)
     | ({
         relationTo: 'blog-authors';
         value: number | BlogAuthor;
       } | null)
     | ({
-        relationTo: 'blog-categories';
-        value: number | BlogCategory;
+        relationTo: 'blog-posts';
+        value: number | BlogPost;
       } | null)
     | ({
         relationTo: 'contact-emails';
         value: number | ContactEmail;
       } | null)
     | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'faq';
+        value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'job-offers';
+        value: number | JobOffer;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'press-releases';
+        value: number | PressRelease;
+      } | null)
+    | ({
         relationTo: 'restaurant-menu';
         value: number | RestaurantMenu;
+      } | null)
+    | ({
+        relationTo: 'team';
+        value: number | Team;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -589,65 +589,12 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "blog-categories_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team_select".
- */
-export interface TeamSelect<T extends boolean = true> {
+export interface BlogCategoriesSelect<T extends boolean = true> {
   name?: T;
-  items?:
-    | T
-    | {
-        name?: T;
-        role?: T;
-        bio?: T;
-        photo?: T;
-        email?: T;
-        phone?: T;
-        linkedin?: T;
-        twitter?: T;
-        facebook?: T;
-        instagram?: T;
-        id?: T;
-      };
+  description?: T;
+  icon?: T;
   slug?: T;
   order?: T;
   updatedAt?: T;
@@ -655,75 +602,12 @@ export interface TeamSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events_select".
+ * via the `definition` "blog-authors_select".
  */
-export interface EventsSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  location?: T;
-  image?: T;
-  date?: T;
-  endDate?: T;
-  virtualLink?: T;
-  registrationLink?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "job-offers_select".
- */
-export interface JobOffersSelect<T extends boolean = true> {
-  title?: T;
-  location?: T;
-  description?: T;
-  requirements?: T;
-  applicationLink?: T;
-  active?: T;
-  postedDate?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials_select".
- */
-export interface TestimonialsSelect<T extends boolean = true> {
-  client?: T;
-  company?: T;
-  quote?: T;
-  photo?: T;
-  rating?: T;
-  date?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "press-releases_select".
- */
-export interface PressReleasesSelect<T extends boolean = true> {
-  title?: T;
-  journal?: T;
-  excerpt?: T;
-  link?: T;
-  publishedDate?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faq_select".
- */
-export interface FaqSelect<T extends boolean = true> {
+export interface BlogAuthorsSelect<T extends boolean = true> {
   name?: T;
-  items?:
-    | T
-    | {
-        question?: T;
-        answer?: T;
-        id?: T;
-      };
+  description?: T;
+  icon?: T;
   slug?: T;
   order?: T;
   updatedAt?: T;
@@ -755,32 +639,6 @@ export interface BlogPostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-authors_select".
- */
-export interface BlogAuthorsSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  icon?: T;
-  slug?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-categories_select".
- */
-export interface BlogCategoriesSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
-  icon?: T;
-  slug?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-emails_select".
  */
 export interface ContactEmailsSelect<T extends boolean = true> {
@@ -790,6 +648,86 @@ export interface ContactEmailsSelect<T extends boolean = true> {
   subject?: T;
   message?: T;
   submittedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  location?: T;
+  image?: T;
+  date?: T;
+  endDate?: T;
+  virtualLink?: T;
+  registrationLink?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faq_select".
+ */
+export interface FaqSelect<T extends boolean = true> {
+  name?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  slug?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-offers_select".
+ */
+export interface JobOffersSelect<T extends boolean = true> {
+  title?: T;
+  location?: T;
+  description?: T;
+  requirements?: T;
+  applicationLink?: T;
+  active?: T;
+  postedDate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "press-releases_select".
+ */
+export interface PressReleasesSelect<T extends boolean = true> {
+  title?: T;
+  journal?: T;
+  excerpt?: T;
+  link?: T;
+  publishedDate?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -814,6 +752,68 @@ export interface RestaurantMenuSelect<T extends boolean = true> {
   order?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team_select".
+ */
+export interface TeamSelect<T extends boolean = true> {
+  name?: T;
+  items?:
+    | T
+    | {
+        name?: T;
+        role?: T;
+        bio?: T;
+        photo?: T;
+        email?: T;
+        phone?: T;
+        linkedin?: T;
+        twitter?: T;
+        facebook?: T;
+        instagram?: T;
+        id?: T;
+      };
+  slug?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  client?: T;
+  company?: T;
+  quote?: T;
+  photo?: T;
+  rating?: T;
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -854,27 +854,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
- */
-export interface Setting {
-  id: number;
-  contact?: {
-    email?: string | null;
-    phone?: string | null;
-    address?: string | null;
-  };
-  socials?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-  };
-  googleAnalyticsId?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -922,28 +901,24 @@ export interface OpeningHour {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings_select".
+ * via the `definition` "settings".
  */
-export interface SettingsSelect<T extends boolean = true> {
-  contact?:
-    | T
-    | {
-        email?: T;
-        phone?: T;
-        address?: T;
-      };
-  socials?:
-    | T
-    | {
-        facebook?: T;
-        instagram?: T;
-        linkedin?: T;
-        twitter?: T;
-      };
-  googleAnalyticsId?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+export interface Setting {
+  id: number;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  socials?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+  };
+  googleAnalyticsId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -999,6 +974,31 @@ export interface OpeningHoursSelect<T extends boolean = true> {
         close?: T;
         isOpen?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  socials?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        linkedin?: T;
+        twitter?: T;
+      };
+  googleAnalyticsId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

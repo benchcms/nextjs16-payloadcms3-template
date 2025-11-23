@@ -11,7 +11,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 
-import { globals, collections } from "./features"
+import { globals, collections } from "@/src/features";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
