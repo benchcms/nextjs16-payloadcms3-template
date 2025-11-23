@@ -5,9 +5,7 @@ import configPromise from "@/src/payload.config";
 
 // TYPES
 
-export type CompanyInfo = {
-    /** Company description/about text */
-    description?: string;
+export type Settings = {
     /** Contact information */
     contact?: {
         email?: string;
@@ -22,24 +20,21 @@ export type CompanyInfo = {
         linkedin?: string;
         twitter?: string;
     };
-    /** Application settings */
-    settings?: {
-        /** Google Analytics Measurement ID */
-        googleAnalyticsId?: string;
-    };
+    /** Google Analytics Measurement ID */
+    googleAnalyticsId?: string;
 };
 
 // PUBLIC API
 
 /**
- * Get company information (description, contact, socials, settings)
+ * Get application settings (contact info, socials, analytics)
  */
-export async function getCompanyInfo(): Promise<CompanyInfo> {
+export async function getSettings(): Promise<Settings> {
     const payload = await getPayload({ config: configPromise });
 
-    const data = await payload.findGlobal({
-        slug: "company-info",
+    const settings = await payload.findGlobal({
+        slug: "settings",
     });
 
-    return data as unknown as CompanyInfo;
+    return settings as unknown as Settings;
 }

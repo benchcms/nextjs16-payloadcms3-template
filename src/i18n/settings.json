@@ -1,13 +1,9 @@
 {
     "label": {
-        "en": "Company Info",
-        "fr": "Infos entreprise"
+        "en": "Settings",
+        "fr": "Paramètres"
     },
     "fields": {
-        "description": {
-            "en": "Business Description",
-            "fr": "Description de l'entreprise"
-        },
         "contact": {
             "en": "Contact Information",
             "fr": "Informations de contact"

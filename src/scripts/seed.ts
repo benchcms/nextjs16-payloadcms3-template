@@ -3,7 +3,7 @@ import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
 
 // Import all seed functions
-import { seedCompany } from "../seed/company";
+import { seedSettings } from "../seed/settings";
 import { seedHours } from "../seed/hours";
 import { seedBlog } from "../seed/blog";
 import { seedTeam } from "../seed/team";
@@ -21,7 +21,7 @@ async function seed() {
 
     try {
         // Seed in order (globals first, then collections)
-        await seedCompany(payload);
+        await seedSettings(payload);
         await seedHours(payload);
         await seedBlog(payload);
         await seedTeam(payload);

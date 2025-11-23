@@ -109,11 +109,11 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
-    'company-info': CompanyInfo;
+    settings: Setting;
     'opening-hours': OpeningHour;
   };
   globalsSelect: {
-    'company-info': CompanyInfoSelect<false> | CompanyInfoSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
     'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
   };
   locale: null;
@@ -857,11 +857,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "company-info".
+ * via the `definition` "settings".
  */
-export interface CompanyInfo {
+export interface Setting {
   id: number;
-  description?: string | null;
   contact?: {
     email?: string | null;
     phone?: string | null;
@@ -873,9 +872,7 @@ export interface CompanyInfo {
     linkedin?: string | null;
     twitter?: string | null;
   };
-  settings?: {
-    googleAnalyticsId?: string | null;
-  };
+  googleAnalyticsId?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -925,10 +922,9 @@ export interface OpeningHour {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "company-info_select".
+ * via the `definition` "settings_select".
  */
-export interface CompanyInfoSelect<T extends boolean = true> {
-  description?: T;
+export interface SettingsSelect<T extends boolean = true> {
   contact?:
     | T
     | {
@@ -944,11 +940,7 @@ export interface CompanyInfoSelect<T extends boolean = true> {
         linkedin?: T;
         twitter?: T;
       };
-  settings?:
-    | T
-    | {
-        googleAnalyticsId?: T;
-      };
+  googleAnalyticsId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

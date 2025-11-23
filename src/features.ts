@@ -1,4 +1,3 @@
-import { CompanyInfo } from "./globals/CompanyInfo";
 import { OpeningHours } from "./globals/OpeningHours";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
@@ -13,9 +12,10 @@ import { BlogAuthors } from "./collections/BlogAuthors";
 import { BlogCategories } from "./collections/BlogCategories";
 import { ContactEmails } from "./collections/ContactEmails";
 import { RestaurantMenu } from "./collections/RestaurantMenu";
+import { Settings } from "./globals/Settings";
 
 export const globals = [
-    CompanyInfo,
+    Settings,
     OpeningHours,
 ];
 
