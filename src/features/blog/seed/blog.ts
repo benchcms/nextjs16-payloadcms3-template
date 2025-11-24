@@ -19,63 +19,99 @@ export async function seedBlog(payload: Payload) {
   const categories = [];
   for (let i = 0; i < 5; i++) {
     const name = faker.word.noun();
-    const category = await payload.create({
+    const slug = faker.helpers.slugify(name).toLowerCase();
+
+    const existing = await payload.find({
       collection: "blog-categories",
-      data: {
-        name,
-        description: faker.lorem.sentence(),
-        slug: faker.helpers.slugify(name).toLowerCase(),
-        order: i,
-        icon: categoryImage?.id,
-      },
+      where: { slug: { equals: slug } },
+      limit: 1,
     });
-    categories.push(category);
+
+    if (existing.docs.length === 0) {
+      const category = await payload.create({
+        collection: "blog-categories",
+        data: {
+          name,
+          description: faker.lorem.sentence(),
+          slug,
+          order: i,
+          icon: categoryImage?.id,
+        },
+      });
+      categories.push(category);
+    } else {
+      categories.push(existing.docs[0]);
+    }
   }
-  console.log(`  ✓ Created ${categories.length} categories`);
+  console.log(`  ✓ Created/found ${categories.length} categories`);
 
   // Create authors
   const authors = [];
   for (let i = 0; i < 3; i++) {
     const name = faker.person.fullName();
-    const author = await payload.create({
+    const slug = faker.helpers.slugify(name).toLowerCase();
+
+    const existing = await payload.find({
       collection: "blog-authors",
-      data: {
-        name,
-        description: faker.person.bio(),
-        slug: faker.helpers.slugify(name).toLowerCase(),
-        order: i,
-        icon: authorImage?.id,
-      },
+      where: { slug: { equals: slug } },
+      limit: 1,
     });
-    authors.push(author);
+
+    if (existing.docs.length === 0) {
+      const author = await payload.create({
+        collection: "blog-authors",
+        data: {
+          name,
+          description: faker.person.bio(),
+          slug,
+          order: i,
+          icon: authorImage?.id,
+        },
+      });
+      authors.push(author);
+    } else {
+      authors.push(existing.docs[0]);
+    }
   }
-  console.log(`  ✓ Created ${authors.length} authors`);
+  console.log(`  ✓ Created/found ${authors.length} authors`);
 
   // Create blog posts
+  let createdPosts = 0;
   for (let i = 0; i < 15; i++) {
     const title = faker.lorem.sentence();
-    await payload.create({
+    const slug = faker.helpers.slugify(title).toLowerCase();
+
+    const existing = await payload.find({
       collection: "blog-posts",
-      data: {
-        title,
-        slug: faker.helpers.slugify(title).toLowerCase(),
-        content: createRichTextParagraphs(
-          Array.from({ length: 5 }, () => faker.lorem.paragraph())
-        ),
-        excerpt: faker.lorem.paragraph(),
-        publishedDate: faker.date.past().toISOString(),
-        author: faker.helpers.arrayElement(authors).id,
-        category: faker.helpers.arrayElement(categories).id,
-        featuredImage: postImage?.id,
-        tags: faker.helpers.maybe(() =>
-          Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
-            tag: faker.word.noun(),
-          }))
-        ),
-      },
+      where: { slug: { equals: slug } },
+      limit: 1,
     });
+
+    if (existing.docs.length === 0) {
+      await payload.create({
+        collection: "blog-posts",
+        data: {
+          title,
+          slug,
+          content: createRichTextParagraphs(
+            Array.from({ length: 5 }, () => faker.lorem.paragraph())
+          ),
+          excerpt: faker.lorem.paragraph(),
+          publishedDate: faker.date.past().toISOString(),
+          author: faker.helpers.arrayElement(authors).id,
+          category: faker.helpers.arrayElement(categories).id,
+          featuredImage: postImage?.id,
+          tags: faker.helpers.maybe(() =>
+            Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
+              tag: faker.word.noun(),
+            }))
+          ),
+        },
+      });
+      createdPosts++;
+    }
   }
-  console.log(`  ✓ Created 15 blog posts`);
+  console.log(`  ✓ Created ${createdPosts} blog posts`);
 
   console.log("✅ Blog seeded");
 }
