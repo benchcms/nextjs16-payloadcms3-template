@@ -2,7 +2,6 @@ import Faq from "@/src/features/faq";
 import Blog from "@/src/features/blog";
 import Team from "@/src/features/team";
 import Events from "@/src/features/events";
-import Settings from "@/src/features/settings";
 import Products from "@/src/features/products";
 import JobOffers from "@/src/features/job-offers";
 import OpeningHours from "@/src/features/opening-hours";
@@ -17,7 +16,6 @@ export const config = [
     Blog,
     Team,
     Events,
-    Settings,
     Products,
     JobOffers,
     OpeningHours,
