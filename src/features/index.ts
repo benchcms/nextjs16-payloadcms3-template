@@ -1,8 +1,18 @@
-import { config } from "@/config";
 import { Payload, GlobalConfig, CollectionConfig } from "payload";
-import MediaFeature from "./media";
-import UsersFeature from "./users";
-import SettingsFeature from "./settings";
+import Faq from "./faq";
+import Blog from "./blog";
+import Team from "./team";
+import Users from "./users";
+import Media from "./media";
+import Events from "./events";
+import Settings from "./settings";
+import Products from "./products";
+import JobOffers from "./job-offers";
+import OpeningHours from "./opening-hours";
+import Testimonials from "./testimonials";
+import ContactEmails from "./contact-emails";
+import PressReleases from "./press-releases";
+import RestaurantMenu from "./restaurant-menu";
 
 type Seed = (payload: Payload) => Promise<void>;
 
@@ -12,9 +22,23 @@ export type Feature = {
   seeds: Seed[];
 };
 
-const mandatoryFeatures = [MediaFeature, UsersFeature, SettingsFeature];
-const allFeatures = [...mandatoryFeatures, ...config];
+const mandatoryFeatures = [Users, Media, Settings];
 
-export const globals = allFeatures.flatMap((f) => f.globals)
-export const collections = allFeatures.flatMap((f) => f.collections)
-export const seeds = allFeatures.flatMap((f) => f.seeds)
+const features = [
+  Faq,
+  Blog,
+  Team,
+  Events,
+  Products,
+  JobOffers,
+  OpeningHours,
+  Testimonials,
+  ContactEmails,
+  PressReleases,
+  RestaurantMenu,
+  ...mandatoryFeatures
+];
+
+export const seeds = features.flatMap((f) => f.seeds)
+export const globals = features.flatMap((f) => f.globals)
+export const collections = features.flatMap((f) => f.collections)

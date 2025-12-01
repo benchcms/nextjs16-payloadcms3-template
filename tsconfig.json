@@ -40,7 +40,6 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules",
-    "src/features/*"
+    "node_modules"
   ]
 }
