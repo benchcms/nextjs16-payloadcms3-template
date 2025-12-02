@@ -1,10 +1,10 @@
 import { CollectionConfig } from "payload";
 
-import i18n from "../i18n/productCategories.json";
+import i18n from "../i18n/catalogCategories.json";
 import { SlugField } from "@/src/fields/SlugField";
 
-export const ProductCategories: CollectionConfig = {
-    slug: "product-categories",
+export const CatalogCategories: CollectionConfig = {
+    slug: "catalog-categories",
     access: {
         read: ({ req: { user } }) => !!user,
     },
@@ -33,7 +33,7 @@ export const ProductCategories: CollectionConfig = {
                             name: "parent",
                             type: "relationship",
                             label: i18n.fields.parent,
-                            relationTo: "product-categories",
+                            relationTo: "catalog-categories",
                             filterOptions: ({ id }) => {
                                 if (!id) {
                                     return true;

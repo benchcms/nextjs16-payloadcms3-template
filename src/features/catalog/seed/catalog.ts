@@ -9,12 +9,12 @@ import { toSlug } from "@/src/fields/SlugField";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export async function seedProducts(payload: Payload) {
-    console.log("🌱 Seeding products...");
+export async function seedCatalog(payload: Payload) {
+    console.log("🌱 Seeding catalog...");
 
-    const categoryImage = await seedAsset(payload, __dirname, "product-category-placeholder.png", "Product Category Placeholder");
-    // Use category image as fallback if product image is missing
-    const productItemImage = await seedAsset(payload, __dirname, "product-item-placeholder.png", "Product Item Placeholder") || categoryImage;
+    const categoryImage = await seedAsset(payload, __dirname, "catalog-category-placeholder.png", "Catalog Category Placeholder");
+    // Use category image as fallback if item image is missing
+    const catalogItemImage = await seedAsset(payload, __dirname, "catalog-item-placeholder.png", "Catalog Item Placeholder") || categoryImage;
 
     // Create categories (nested)
     const categories = [];
@@ -26,7 +26,7 @@ export async function seedProducts(payload: Payload) {
         const slug = toSlug(name);
 
         const existing = await payload.find({
-            collection: "product-categories",
+            collection: "catalog-categories",
             where: { slug: { equals: slug } },
             limit: 1,
         });
@@ -34,7 +34,7 @@ export async function seedProducts(payload: Payload) {
         let category;
         if (existing.docs.length === 0) {
             category = await payload.create({
-                collection: "product-categories",
+                collection: "catalog-categories",
                 data: {
                     name,
                     description: faker.lorem.sentence(),
@@ -55,14 +55,14 @@ export async function seedProducts(payload: Payload) {
             const subSlug = toSlug(subName);
 
             const existingSub = await payload.find({
-                collection: "product-categories",
+                collection: "catalog-categories",
                 where: { slug: { equals: subSlug } },
                 limit: 1,
             });
 
             if (existingSub.docs.length === 0) {
                 const subCategory = await payload.create({
-                    collection: "product-categories",
+                    collection: "catalog-categories",
                     data: {
                         name: subName,
                         description: faker.lorem.sentence(),
@@ -80,14 +80,14 @@ export async function seedProducts(payload: Payload) {
     }
     console.log(`  ✓ Created/found ${categories.length} categories`);
 
-    // Create products
-    let createdProducts = 0;
+    // Create items
+    let createdItems = 0;
     for (let i = 0; i < 20; i++) {
         const name = faker.commerce.productName();
         const slug = toSlug(name);
 
         const existing = await payload.find({
-            collection: "product-items",
+            collection: "catalog-items",
             where: { slug: { equals: slug } },
             limit: 1,
         });
@@ -97,7 +97,7 @@ export async function seedProducts(payload: Payload) {
             const assignedCategories = faker.helpers.arrayElements(categories, faker.number.int({ min: 1, max: 3 })).map(c => c.id);
 
             await payload.create({
-                collection: "product-items",
+                collection: "catalog-items",
                 data: {
                     name,
                     slug,
@@ -106,7 +106,7 @@ export async function seedProducts(payload: Payload) {
                     description: createRichTextParagraphs(
                         Array.from({ length: 3 }, () => faker.lorem.paragraph())
                     ),
-                    gallery: productItemImage ? [productItemImage.id] : [],
+                    gallery: catalogItemImage ? [catalogItemImage.id] : [],
                     specifications: Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, () => ({
                         name: faker.commerce.productMaterial(),
                         value: faker.commerce.productAdjective(),
@@ -114,10 +114,10 @@ export async function seedProducts(payload: Payload) {
                     order: i,
                 },
             });
-            createdProducts++;
+            createdItems++;
         }
     }
-    console.log(`  ✓ Created ${createdProducts} products`);
+    console.log(`  ✓ Created ${createdItems} items`);
 
-    console.log("✅ Products seeded");
+    console.log("✅ Catalog seeded");
 }

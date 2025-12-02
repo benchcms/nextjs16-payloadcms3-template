@@ -1,12 +1,12 @@
 {
     "labels": {
         "singular": {
-            "en": "Product Category",
-            "fr": "Catégorie de produits"
+            "en": "Catalog Category",
+            "fr": "Catégorie du catalogue"
         },
         "plural": {
-            "en": "Product Categories",
-            "fr": "Catégories de produits"
+            "en": "Catalog Categories",
+            "fr": "Catégories du catalogue"
         }
     },
     "tabs": {

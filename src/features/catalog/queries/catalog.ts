@@ -2,22 +2,22 @@
 
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { ProductItem, ProductCategory } from "@/src/payload-types";
+import type { CatalogItem, CatalogCategory } from "@/src/payload-types";
 
 // PUBLIC API
 
 /**
- * Get all product items with optional filtering and pagination
+ * Get all catalog items with optional filtering and pagination
  */
-export async function getProductItems(options?: {
+export async function getCatalogItems(options?: {
     limit?: number;
     page?: number;
     category?: string;
-}): Promise<ProductItem[]> {
+}): Promise<CatalogItem[]> {
     const payload = await getPayload({ config: configPromise });
 
     const { docs } = await payload.find({
-        collection: "product-items",
+        collection: "catalog-items",
         limit: options?.limit || 10,
         page: options?.page || 1,
         where: options?.category
@@ -35,13 +35,13 @@ export async function getProductItems(options?: {
 }
 
 /**
- * Get a single product item by slug
+ * Get a single catalog item by slug
  */
-export async function getProductItem(slug: string): Promise<ProductItem | null> {
+export async function getCatalogItem(slug: string): Promise<CatalogItem | null> {
     const payload = await getPayload({ config: configPromise });
 
     const { docs } = await payload.find({
-        collection: "product-items",
+        collection: "catalog-items",
         where: {
             slug: {
                 equals: slug,
@@ -55,13 +55,13 @@ export async function getProductItem(slug: string): Promise<ProductItem | null> 
 }
 
 /**
- * Get all product categories (including nested ones)
+ * Get all catalog categories (including nested ones)
  */
-export async function getProductCategories(): Promise<ProductCategory[]> {
+export async function getCatalogCategories(): Promise<CatalogCategory[]> {
     const payload = await getPayload({ config: configPromise });
 
     const { docs } = await payload.find({
-        collection: "product-categories",
+        collection: "catalog-categories",
         sort: "order",
         depth: 1,
     });
@@ -70,13 +70,13 @@ export async function getProductCategories(): Promise<ProductCategory[]> {
 }
 
 /**
- * Get root product categories (categories without parents)
+ * Get root catalog categories (categories without parents)
  */
-export async function getRootProductCategories(): Promise<ProductCategory[]> {
+export async function getRootCatalogCategories(): Promise<CatalogCategory[]> {
     const payload = await getPayload({ config: configPromise });
 
     const { docs } = await payload.find({
-        collection: "product-categories",
+        collection: "catalog-categories",
         where: {
             parent: {
                 exists: false,
@@ -91,15 +91,15 @@ export async function getRootProductCategories(): Promise<ProductCategory[]> {
 /**
  * Get subcategories of a specific category
  */
-export async function getProductSubCategories(parentSlug: string): Promise<ProductCategory[]> {
+export async function getCatalogSubCategories(parentSlug: string): Promise<CatalogCategory[]> {
     const payload = await getPayload({ config: configPromise });
 
     // First, find the parent category
-    const parent = await getProductCategory(parentSlug);
+    const parent = await getCatalogCategory(parentSlug);
     if (!parent) return [];
 
     const { docs } = await payload.find({
-        collection: "product-categories",
+        collection: "catalog-categories",
         where: {
             "parent.id": {
                 equals: parent.id,
@@ -112,13 +112,13 @@ export async function getProductSubCategories(parentSlug: string): Promise<Produ
 }
 
 /**
- * Get a single product category by slug
+ * Get a single catalog category by slug
  */
-export async function getProductCategory(slug: string): Promise<ProductCategory | null> {
+export async function getCatalogCategory(slug: string): Promise<CatalogCategory | null> {
     const payload = await getPayload({ config: configPromise });
 
     const { docs } = await payload.find({
-        collection: "product-categories",
+        collection: "catalog-categories",
         where: {
             slug: {
                 equals: slug,
@@ -132,8 +132,8 @@ export async function getProductCategory(slug: string): Promise<ProductCategory 
 }
 
 /**
- * Get products by category slug
+ * Get items by category slug
  */
-export async function getProductsByCategory(categorySlug: string, limit = 10): Promise<ProductItem[]> {
-    return getProductItems({ category: categorySlug, limit });
+export async function getItemsByCategory(categorySlug: string, limit = 10): Promise<CatalogItem[]> {
+    return getCatalogItems({ category: categorySlug, limit });
 }

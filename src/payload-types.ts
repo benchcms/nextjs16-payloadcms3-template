@@ -67,21 +67,21 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    admins: Admin;
+    media: Media;
     faq: Faq;
     'blog-categories': BlogCategory;
     'blog-authors': BlogAuthor;
     'blog-posts': BlogPost;
     team: Team;
     events: Event;
-    'product-categories': ProductCategory;
-    'product-items': ProductItem;
+    'catalog-categories': CatalogCategory;
+    'catalog-items': CatalogItem;
     'job-offers': JobOffer;
     testimonials: Testimonial;
     'contact-emails': ContactEmail;
     'press-releases': PressRelease;
     'restaurant-menu': RestaurantMenu;
-    admins: Admin;
-    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -89,21 +89,21 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    admins: AdminsSelect<false> | AdminsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     faq: FaqSelect<false> | FaqSelect<true>;
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
     'blog-authors': BlogAuthorsSelect<false> | BlogAuthorsSelect<true>;
     'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     team: TeamSelect<false> | TeamSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
-    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
-    'product-items': ProductItemsSelect<false> | ProductItemsSelect<true>;
+    'catalog-categories': CatalogCategoriesSelect<false> | CatalogCategoriesSelect<true>;
+    'catalog-items': CatalogItemsSelect<false> | CatalogItemsSelect<true>;
     'job-offers': JobOffersSelect<false> | JobOffersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     'press-releases': PressReleasesSelect<false> | PressReleasesSelect<true>;
     'restaurant-menu': RestaurantMenuSelect<false> | RestaurantMenuSelect<true>;
-    admins: AdminsSelect<false> | AdminsSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -113,12 +113,12 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
-    'opening-hours': OpeningHour;
     settings: Setting;
+    'opening-hours': OpeningHour;
   };
   globalsSelect: {
-    'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -146,6 +146,49 @@ export interface AdminAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admins".
+ */
+export interface Admin {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -193,25 +236,6 @@ export interface BlogCategory {
   order: number;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -327,12 +351,12 @@ export interface Event {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-categories".
+ * via the `definition` "catalog-categories".
  */
-export interface ProductCategory {
+export interface CatalogCategory {
   id: number;
   name: string;
-  parent?: (number | null) | ProductCategory;
+  parent?: (number | null) | CatalogCategory;
   description?: string | null;
   image?: (number | null) | Media;
   slug: string;
@@ -342,12 +366,12 @@ export interface ProductCategory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-items".
+ * via the `definition` "catalog-items".
  */
-export interface ProductItem {
+export interface CatalogItem {
   id: number;
   name: string;
-  categories: (number | ProductCategory)[];
+  categories: (number | CatalogCategory)[];
   price?: number | null;
   gallery?: (number | Media)[] | null;
   description?: {
@@ -372,7 +396,7 @@ export interface ProductItem {
         id?: string | null;
       }[]
     | null;
-  relatedProducts?: (number | ProductItem)[] | null;
+  relatedItems?: (number | CatalogItem)[] | null;
   slug: string;
   order: number;
   updatedAt: string;
@@ -507,30 +531,6 @@ export interface RestaurantMenu {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins".
- */
-export interface Admin {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -553,6 +553,14 @@ export interface PayloadKv {
 export interface PayloadLockedDocument {
   id: number;
   document?:
+    | ({
+        relationTo: 'admins';
+        value: number | Admin;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
     | ({
         relationTo: 'faq';
         value: number | Faq;
@@ -578,12 +586,12 @@ export interface PayloadLockedDocument {
         value: number | Event;
       } | null)
     | ({
-        relationTo: 'product-categories';
-        value: number | ProductCategory;
+        relationTo: 'catalog-categories';
+        value: number | CatalogCategory;
       } | null)
     | ({
-        relationTo: 'product-items';
-        value: number | ProductItem;
+        relationTo: 'catalog-items';
+        value: number | CatalogItem;
       } | null)
     | ({
         relationTo: 'job-offers';
@@ -604,14 +612,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'restaurant-menu';
         value: number | RestaurantMenu;
-      } | null)
-    | ({
-        relationTo: 'admins';
-        value: number | Admin;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -654,6 +654,46 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admins_select".
+ */
+export interface AdminsSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -768,9 +808,9 @@ export interface EventsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-categories_select".
+ * via the `definition` "catalog-categories_select".
  */
-export interface ProductCategoriesSelect<T extends boolean = true> {
+export interface CatalogCategoriesSelect<T extends boolean = true> {
   name?: T;
   parent?: T;
   description?: T;
@@ -782,9 +822,9 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-items_select".
+ * via the `definition` "catalog-items_select".
  */
-export interface ProductItemsSelect<T extends boolean = true> {
+export interface CatalogItemsSelect<T extends boolean = true> {
   name?: T;
   categories?: T;
   price?: T;
@@ -797,7 +837,7 @@ export interface ProductItemsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
-  relatedProducts?: T;
+  relatedItems?: T;
   slug?: T;
   order?: T;
   updatedAt?: T;
@@ -885,46 +925,6 @@ export interface RestaurantMenuSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admins_select".
- */
-export interface AdminsSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -962,6 +962,27 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: number;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  socials?: {
+    facebook?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+  };
+  googleAnalyticsId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1009,24 +1030,28 @@ export interface OpeningHour {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
+ * via the `definition` "settings_select".
  */
-export interface Setting {
-  id: number;
-  contact?: {
-    email?: string | null;
-    phone?: string | null;
-    address?: string | null;
-  };
-  socials?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-  };
-  googleAnalyticsId?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+export interface SettingsSelect<T extends boolean = true> {
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  socials?:
+    | T
+    | {
+        facebook?: T;
+        instagram?: T;
+        linkedin?: T;
+        twitter?: T;
+      };
+  googleAnalyticsId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1082,31 +1107,6 @@ export interface OpeningHoursSelect<T extends boolean = true> {
         close?: T;
         isOpen?: T;
       };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings_select".
- */
-export interface SettingsSelect<T extends boolean = true> {
-  contact?:
-    | T
-    | {
-        email?: T;
-        phone?: T;
-        address?: T;
-      };
-  socials?:
-    | T
-    | {
-        facebook?: T;
-        instagram?: T;
-        linkedin?: T;
-        twitter?: T;
-      };
-  googleAnalyticsId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

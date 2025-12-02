@@ -1,12 +1,12 @@
 {
     "labels": {
         "singular": {
-            "en": "Product Item",
-            "fr": "Produit"
+            "en": "Catalog Item",
+            "fr": "Article du catalogue"
         },
         "plural": {
-            "en": "Product Items",
-            "fr": "Produits"
+            "en": "Catalog Items",
+            "fr": "Articles du catalogue"
         }
     },
     "tabs": {
@@ -66,9 +66,9 @@
             "en": "Description",
             "fr": "Description"
         },
-        "relatedProducts": {
-            "en": "Related Products",
-            "fr": "Produits associés"
+        "relatedItems": {
+            "en": "Related Items",
+            "fr": "Articles associés"
         },
         "order": {
             "en": "Order",

@@ -2,11 +2,11 @@ import { Payload, GlobalConfig, CollectionConfig } from "payload";
 import Faq from "./faq";
 import Blog from "./blog";
 import Team from "./team";
-import Admins from "./admins";
 import Media from "./media";
+import Admins from "./admins";
 import Events from "./events";
+import Catalog from "./catalog";
 import Settings from "./settings";
-import Products from "./products";
 import JobOffers from "./job-offers";
 import OpeningHours from "./opening-hours";
 import Testimonials from "./testimonials";
@@ -30,7 +30,7 @@ const features = [
   Blog,
   Team,
   Events,
-  Products,
+  Catalog,
   JobOffers,
   OpeningHours,
   Testimonials,
@@ -39,6 +39,6 @@ const features = [
   RestaurantMenu,
 ];
 
-export const seeds = features.flatMap((f) => f.seeds)
-export const globals = features.flatMap((f) => f.globals)
-export const collections = features.flatMap((f) => f.collections)
+export const seeds = features.flatMap((f) => f.seeds);
+export const globals = features.flatMap((f) => f.globals);
+export const collections = features.flatMap((f) => f.collections);
