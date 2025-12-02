@@ -17,8 +17,8 @@ export async function seedCatalog(payload: Payload) {
     const catalogItemImage = await seedAsset(payload, __dirname, "catalog-item-placeholder.png", "Catalog Item Placeholder") || categoryImage;
 
     // Create categories (nested)
-    const categories = [];
-    const rootCategories = [];
+    // We track leaf categories separately - items should only be assigned to leaves
+    const leafCategories = [];
 
     // Create 3 root categories
     for (let i = 0; i < 3; i++) {
@@ -46,8 +46,6 @@ export async function seedCatalog(payload: Payload) {
         } else {
             category = existing.docs[0];
         }
-        categories.push(category);
-        rootCategories.push(category);
 
         // Create 2 subcategories for each root category
         for (let j = 0; j < 2; j++) {
@@ -60,8 +58,9 @@ export async function seedCatalog(payload: Payload) {
                 limit: 1,
             });
 
+            let subCategory;
             if (existingSub.docs.length === 0) {
-                const subCategory = await payload.create({
+                subCategory = await payload.create({
                     collection: "catalog-categories",
                     data: {
                         name: subName,
@@ -72,13 +71,14 @@ export async function seedCatalog(payload: Payload) {
                         parent: category.id,
                     },
                 });
-                categories.push(subCategory);
             } else {
-                categories.push(existingSub.docs[0]);
+                subCategory = existingSub.docs[0];
             }
+            // Only leaf categories (subcategories) are added
+            leafCategories.push(subCategory);
         }
     }
-    console.log(`  ✓ Created/found ${categories.length} categories`);
+    console.log(`  ✓ Created/found ${leafCategories.length} leaf categories`);
 
     // Create items
     let createdItems = 0;
@@ -93,8 +93,8 @@ export async function seedCatalog(payload: Payload) {
         });
 
         if (existing.docs.length === 0) {
-            // Assign to 1-3 random categories
-            const assignedCategories = faker.helpers.arrayElements(categories, faker.number.int({ min: 1, max: 3 })).map(c => c.id);
+            // Assign to 1-3 random leaf categories only
+            const assignedCategories = faker.helpers.arrayElements(leafCategories, faker.number.int({ min: 1, max: 3 })).map(c => c.id);
 
             await payload.create({
                 collection: "catalog-items",
