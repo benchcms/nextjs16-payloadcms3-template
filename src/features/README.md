@@ -28,7 +28,7 @@ List all public query functions exported from `queries/*.ts`.
 List the views and components the agent should build.
 - **Terminology**: Use **"View"** instead of "Page" to imply flexibility.
 - **Placement**: Explicitly state "Dedicated page OR section on Home/About page" where appropriate.
-- **NO Code Examples**: Do not provide component code examples (unless it's a complex form logic). Let the agent use its templates.
+- **Code Examples**: Only include code examples for complex form logic, mutations, or multi-step workflows where an end-to-end example materially clarifies usage. For simple display components, let the agent use its templates.
 
 ### 5. Data Display Guidelines
 List the key data types and how to display their fields.
