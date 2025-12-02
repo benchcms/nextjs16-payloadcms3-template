@@ -22,9 +22,10 @@ export type Feature = {
   seeds: Seed[];
 };
 
-const mandatoryFeatures = [Admins, Media, Settings];
+const mandatoryFeatures = [Admins, Settings, Media];
 
 const features = [
+  ...mandatoryFeatures,
   Faq,
   Blog,
   Team,
@@ -36,7 +37,6 @@ const features = [
   ContactEmails,
   PressReleases,
   RestaurantMenu,
-  ...mandatoryFeatures
 ];
 
 export const seeds = features.flatMap((f) => f.seeds)
