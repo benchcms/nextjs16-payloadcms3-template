@@ -8,7 +8,7 @@ The Restaurant Menu feature manages menu categories (e.g., "Starters", "Main Cou
 
 ### `getMenuCategories(): Promise<RestaurantMenu[]>`
 
-Get all menu categories, including their dishes. Sorted by the `order` field.
+Get all menu categories, including their dishes.
 
 - **Returns**: `Promise<RestaurantMenu[]>` - Array of RestaurantMenu objects (categories)
 

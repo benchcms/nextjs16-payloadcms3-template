@@ -80,7 +80,6 @@ export async function getRootCatalogCategories(): Promise<CatalogCategory[]> {
 export async function getCatalogSubCategories(parentSlug: string): Promise<CatalogCategory[]> {
     const payload = await getPayload({ config: configPromise });
 
-    // First, find the parent category
     const parent = await getCatalogCategory(parentSlug);
     if (!parent) return [];
 

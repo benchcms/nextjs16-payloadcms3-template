@@ -13,6 +13,7 @@ import type { JobOffer } from "@/src/payload-types";
 export async function getActiveJobOffers(options?: {
     limit?: number;
     page?: number;
+    sort?: string;
 }): Promise<PaginatedDocs<JobOffer>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -25,7 +26,7 @@ export async function getActiveJobOffers(options?: {
                 equals: true,
             },
         },
-        sort: "-postedDate",
+        sort: options?.sort ?? "-postedDate",
         depth: 1,
     });
 
@@ -38,6 +39,7 @@ export async function getActiveJobOffers(options?: {
 export async function getJobOffers(options?: {
     limit?: number;
     page?: number;
+    sort?: string;
 }): Promise<PaginatedDocs<JobOffer>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -45,7 +47,7 @@ export async function getJobOffers(options?: {
         collection: "job-offers",
         limit: options?.limit || 20,
         page: options?.page || 1,
-        sort: "-postedDate",
+        sort: options?.sort ?? "-postedDate",
         depth: 1,
     });
 

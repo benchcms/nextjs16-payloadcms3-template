@@ -15,6 +15,7 @@ export async function getBlogPosts(options?: {
     page?: number;
     category?: string;
     author?: string;
+    sort?: string;
 }): Promise<PaginatedDocs<BlogPost>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -33,7 +34,7 @@ export async function getBlogPosts(options?: {
         limit: options?.limit || 10,
         page: options?.page || 1,
         where: Object.keys(where).length > 0 ? where : undefined,
-        sort: "-publishedDate",
+        sort: options?.sort ?? "-publishedDate",
         depth: 2,
     });
 

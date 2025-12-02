@@ -13,6 +13,7 @@ import type { PressRelease } from "@/src/payload-types";
 export async function getPressReleases(options?: {
     limit?: number;
     page?: number;
+    sort?: string;
 }): Promise<PaginatedDocs<PressRelease>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -20,7 +21,7 @@ export async function getPressReleases(options?: {
         collection: "press-releases",
         limit: options?.limit || 20,
         page: options?.page || 1,
-        sort: "-publishedDate",
+        sort: options?.sort ?? "-publishedDate",
         depth: 1,
     });
 

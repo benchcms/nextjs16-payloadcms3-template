@@ -13,6 +13,7 @@ import type { Testimonial } from "@/src/payload-types";
 export async function getTestimonials(options?: {
     limit?: number;
     page?: number;
+    sort?: string;
 }): Promise<PaginatedDocs<Testimonial>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -20,7 +21,7 @@ export async function getTestimonials(options?: {
         collection: "testimonials",
         limit: options?.limit || 20,
         page: options?.page || 1,
-        sort: "-date",
+        sort: options?.sort ?? "-date",
         depth: 1,
     });
 

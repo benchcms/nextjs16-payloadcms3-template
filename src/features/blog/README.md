@@ -11,7 +11,8 @@ The Blog feature manages blog posts, categories, and authors. It allows displayi
 Get a list of blog posts with optional filtering and pagination.
 
 - **Parameters**: 
-  - `options`: `{ limit?: number; page?: number; category?: string; author?: string; }`
+  - `options`: `{ limit?: number; page?: number; category?: string; author?: string; sort?: string; }`
+  - `sort`: Sort order (default: `"-publishedDate"`)
 - **Returns**: `Promise<PaginatedDocs<BlogPost>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getBlogPost(slug: string): Promise<BlogPost | null>`

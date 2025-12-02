@@ -8,7 +8,7 @@ The Team feature manages groups of team members (e.g., "Management", "Kitchen St
 
 ### `getTeamGroups(): Promise<Team[]>`
 
-Get all team groups, including their members. Sorted by the `order` field.
+Get all team groups, including their members.
 
 - **Returns**: `Promise<Team[]>` - Array of Team objects (groups)
 

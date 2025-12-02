@@ -8,7 +8,7 @@ The FAQ (Frequently Asked Questions) feature manages groups of questions and ans
 
 ### `getFAQGroups(): Promise<Faq[]>`
 
-Get all FAQ groups, including their questions and answers. Sorted by the `order` field.
+Get all FAQ groups, including their questions and answers.
 
 - **Returns**: `Promise<Faq[]>` - Array of Faq objects (groups)
 

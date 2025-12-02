@@ -10,7 +10,10 @@ import type { Event } from "@/src/payload-types";
 /**
  * Get upcoming events
  */
-export async function getUpcomingEvents(limit = 10): Promise<Event[]> {
+export async function getUpcomingEvents(options?: {
+    limit?: number;
+    sort?: string;
+}): Promise<Event[]> {
     const payload = await getPayload({ config: configPromise });
 
     const now = new Date().toISOString();
@@ -22,8 +25,8 @@ export async function getUpcomingEvents(limit = 10): Promise<Event[]> {
                 greater_than_equal: now,
             },
         },
-        limit,
-        sort: "date",
+        limit: options?.limit ?? 10,
+        sort: options?.sort ?? "date",
         depth: 1,
     });
 
@@ -36,6 +39,7 @@ export async function getUpcomingEvents(limit = 10): Promise<Event[]> {
 export async function getEvents(options?: {
     limit?: number;
     page?: number;
+    sort?: string;
 }): Promise<PaginatedDocs<Event>> {
     const payload = await getPayload({ config: configPromise });
 
@@ -43,7 +47,7 @@ export async function getEvents(options?: {
         collection: "events",
         limit: options?.limit || 50,
         page: options?.page || 1,
-        sort: "-date",
+        sort: options?.sort ?? "-date",
         depth: 1,
     });
 

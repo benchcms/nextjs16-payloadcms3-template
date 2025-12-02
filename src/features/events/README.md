@@ -6,12 +6,14 @@ The Events feature manages upcoming events, workshops, or gatherings. It allows 
 
 ## Queries (Read Operations)
 
-### `getUpcomingEvents(limit?: number): Promise<Event[]>`
+### `getUpcomingEvents(options?): Promise<Event[]>`
 
-Get a list of upcoming events, sorted by date (soonest first).
+Get a list of upcoming events.
 
 - **Parameters**: 
-  - `limit` (optional, default 10): Maximum number of events to return
+  - `options`: `{ limit?: number; sort?: string; }`
+  - `limit`: Maximum number of events to return (default: `10`)
+  - `sort`: Sort order (default: `"date"`)
 - **Returns**: `Promise<Event[]>` - Array of Event objects
 
 ### `getEvents(options?): Promise<PaginatedDocs<Event>>`
@@ -19,7 +21,8 @@ Get a list of upcoming events, sorted by date (soonest first).
 Get all events (past and future) with pagination support.
 
 - **Parameters**: 
-  - `options`: `{ limit?: number; page?: number; }`
+  - `options`: `{ limit?: number; page?: number; sort?: string; }`
+  - `sort`: Sort order (default: `"-date"`)
 - **Returns**: `Promise<PaginatedDocs<Event>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getEvent(slug: string): Promise<Event | null>`
