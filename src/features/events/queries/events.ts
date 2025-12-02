@@ -1,6 +1,7 @@
 "use server";
 
 import { getPayload } from "payload";
+import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
 import type { Event } from "@/src/payload-types";
 
@@ -35,10 +36,10 @@ export async function getUpcomingEvents(limit = 10): Promise<Event[]> {
 export async function getEvents(options?: {
     limit?: number;
     page?: number;
-}): Promise<Event[]> {
+}): Promise<PaginatedDocs<Event>> {
     const payload = await getPayload({ config: configPromise });
 
-    const { docs } = await payload.find({
+    const result = await payload.find({
         collection: "events",
         limit: options?.limit || 50,
         page: options?.page || 1,
@@ -46,7 +47,7 @@ export async function getEvents(options?: {
         depth: 1,
     });
 
-    return docs;
+    return result;
 }
 
 /**

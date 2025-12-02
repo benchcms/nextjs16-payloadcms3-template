@@ -14,13 +14,13 @@ Get a list of upcoming events, sorted by date (soonest first).
   - `limit` (optional, default 10): Maximum number of events to return
 - **Returns**: `Promise<Event[]>` - Array of Event objects
 
-### `getEvents(options?: { limit?: number; page?: number }): Promise<Event[]>`
+### `getEvents(options?): Promise<PaginatedDocs<Event>>`
 
 Get all events (past and future) with pagination support.
 
 - **Parameters**: 
-  - `options` object with `limit` and `page`
-- **Returns**: `Promise<Event[]>`
+  - `options`: `{ limit?: number; page?: number; }`
+- **Returns**: `Promise<PaginatedDocs<Event>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getEvent(slug: string): Promise<Event | null>`
 

@@ -6,13 +6,13 @@ The Blog feature manages blog posts, categories, and authors. It allows displayi
 
 ## Queries (Read Operations)
 
-### `getBlogPosts(options?): Promise<BlogPost[]>`
+### `getBlogPosts(options?): Promise<PaginatedDocs<BlogPost>>`
 
-Get a list of blog posts with optional filtering.
+Get a list of blog posts with optional filtering and pagination.
 
 - **Parameters**: 
   - `options`: `{ limit?: number; page?: number; category?: string; author?: string; }`
-- **Returns**: `Promise<BlogPost[]>`
+- **Returns**: `Promise<PaginatedDocs<BlogPost>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getBlogPost(slug: string): Promise<BlogPost | null>`
 

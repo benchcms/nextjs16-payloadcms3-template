@@ -6,11 +6,13 @@ The Press Releases feature manages company news and announcements.
 
 ## Queries (Read Operations)
 
-### `getPressReleases(limit?: number): Promise<PressRelease[]>`
+### `getPressReleases(options?): Promise<PaginatedDocs<PressRelease>>`
 
-Get all press releases, sorted by published date (newest first).
+Get all press releases with pagination, sorted by published date (newest first).
 
-- **Returns**: `Promise<PressRelease[]>`
+- **Parameters**: 
+  - `options`: `{ limit?: number; page?: number; }`
+- **Returns**: `Promise<PaginatedDocs<PressRelease>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getPressRelease(slug: string): Promise<PressRelease | null>`
 

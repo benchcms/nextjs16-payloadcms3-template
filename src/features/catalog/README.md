@@ -6,13 +6,13 @@ The Catalog feature manages catalog categories and items. It allows displaying a
 
 ## Queries (Read Operations)
 
-### `getCatalogItems(options?): Promise<CatalogItem[]>`
+### `getCatalogItems(options?): Promise<PaginatedDocs<CatalogItem>>`
 
-Get a list of catalog items with optional filtering.
+Get a list of catalog items with optional filtering and pagination.
 
 - **Parameters**: 
   - `options`: `{ limit?: number; page?: number; category?: string; }`
-- **Returns**: `Promise<CatalogItem[]>`
+- **Returns**: `Promise<PaginatedDocs<CatalogItem>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getCatalogItem(slug: string): Promise<CatalogItem | null>`
 

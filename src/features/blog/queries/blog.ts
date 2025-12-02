@@ -1,6 +1,7 @@
 "use server";
 
 import { getPayload } from "payload";
+import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
 import type { BlogPost, BlogAuthor, BlogCategory } from "@/src/payload-types";
 
@@ -14,7 +15,7 @@ export async function getBlogPosts(options?: {
     page?: number;
     category?: string;
     author?: string;
-}): Promise<BlogPost[]> {
+}): Promise<PaginatedDocs<BlogPost>> {
     const payload = await getPayload({ config: configPromise });
 
     const where: any = {};
@@ -27,7 +28,7 @@ export async function getBlogPosts(options?: {
         where["author.slug"] = { equals: options.author };
     }
 
-    const { docs } = await payload.find({
+    const result = await payload.find({
         collection: "blog-posts",
         limit: options?.limit || 10,
         page: options?.page || 1,
@@ -36,7 +37,7 @@ export async function getBlogPosts(options?: {
         depth: 2,
     });
 
-    return docs;
+    return result;
 }
 
 /**
@@ -129,13 +130,13 @@ export async function getBlogCategory(slug: string): Promise<BlogCategory | null
 /**
  * Get blog posts by author slug
  */
-export async function getBlogPostsByAuthor(authorSlug: string, limit = 10): Promise<BlogPost[]> {
+export async function getBlogPostsByAuthor(authorSlug: string, limit = 10): Promise<PaginatedDocs<BlogPost>> {
     return getBlogPosts({ author: authorSlug, limit });
 }
 
 /**
  * Get blog posts by category slug
  */
-export async function getBlogPostsByCategory(categorySlug: string, limit = 10): Promise<BlogPost[]> {
+export async function getBlogPostsByCategory(categorySlug: string, limit = 10): Promise<PaginatedDocs<BlogPost>> {
     return getBlogPosts({ category: categorySlug, limit });
 }

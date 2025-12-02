@@ -1,23 +1,28 @@
 "use server";
 
 import { getPayload } from "payload";
+import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
 import type { Testimonial } from "@/src/payload-types";
 
 // PUBLIC API
 
 /**
- * Get all testimonials
+ * Get all testimonials with pagination
  */
-export async function getTestimonials(limit = 20): Promise<Testimonial[]> {
+export async function getTestimonials(options?: {
+    limit?: number;
+    page?: number;
+}): Promise<PaginatedDocs<Testimonial>> {
     const payload = await getPayload({ config: configPromise });
 
-    const { docs } = await payload.find({
+    const result = await payload.find({
         collection: "testimonials",
-        limit,
+        limit: options?.limit || 20,
+        page: options?.page || 1,
         sort: "-date",
         depth: 1,
     });
 
-    return docs;
+    return result;
 }

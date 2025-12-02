@@ -6,15 +6,21 @@ The Job Offers feature manages job listings. It allows displaying a list of acti
 
 ## Queries (Read Operations)
 
-### `getActiveJobOffers(): Promise<JobOffer[]>`
+### `getActiveJobOffers(options?): Promise<PaginatedDocs<JobOffer>>`
 
-Get all active job offers, sorted by posted date (newest first).
+Get all active job offers with pagination, sorted by posted date (newest first).
 
-- **Returns**: `Promise<JobOffer[]>`
+- **Parameters**: 
+  - `options`: `{ limit?: number; page?: number; }`
+- **Returns**: `Promise<PaginatedDocs<JobOffer>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
-### `getJobOffers(): Promise<JobOffer[]>`
+### `getJobOffers(options?): Promise<PaginatedDocs<JobOffer>>`
 
-Get all job offers (including inactive).
+Get all job offers (including inactive) with pagination.
+
+- **Parameters**: 
+  - `options`: `{ limit?: number; page?: number; }`
+- **Returns**: `Promise<PaginatedDocs<JobOffer>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ### `getJobOffer(slug: string): Promise<JobOffer | null>`
 

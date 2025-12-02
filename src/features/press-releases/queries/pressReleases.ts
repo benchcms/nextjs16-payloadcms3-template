@@ -1,25 +1,30 @@
 "use server";
 
 import { getPayload } from "payload";
+import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
 import type { PressRelease } from "@/src/payload-types";
 
 // PUBLIC API
 
 /**
- * Get all press releases
+ * Get all press releases with pagination
  */
-export async function getPressReleases(limit = 20): Promise<PressRelease[]> {
+export async function getPressReleases(options?: {
+    limit?: number;
+    page?: number;
+}): Promise<PaginatedDocs<PressRelease>> {
     const payload = await getPayload({ config: configPromise });
 
-    const { docs } = await payload.find({
+    const result = await payload.find({
         collection: "press-releases",
-        limit,
+        limit: options?.limit || 20,
+        page: options?.page || 1,
         sort: "-publishedDate",
         depth: 1,
     });
 
-    return docs;
+    return result;
 }
 
 /**

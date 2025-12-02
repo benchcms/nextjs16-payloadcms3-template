@@ -6,12 +6,13 @@ The Testimonials feature manages client reviews and feedback.
 
 ## Queries (Read Operations)
 
-### `getTestimonials(limit?: number): Promise<Testimonial[]>`
+### `getTestimonials(options?): Promise<PaginatedDocs<Testimonial>>`
 
-Get all testimonials, sorted by date (newest first).
+Get all testimonials with pagination, sorted by date (newest first).
 
-- **Parameters**: `limit` (default 20)
-- **Returns**: `Promise<Testimonial[]>`
+- **Parameters**: 
+  - `options`: `{ limit?: number; page?: number; }`
+- **Returns**: `Promise<PaginatedDocs<Testimonial>>` - Includes `docs`, `totalDocs`, `totalPages`, `page`, `hasNextPage`, `hasPrevPage`
 
 ## UI Components to Create
 

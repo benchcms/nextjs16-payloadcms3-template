@@ -1,6 +1,7 @@
 "use server";
 
 import { getPayload } from "payload";
+import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
 import type { CatalogItem, CatalogCategory } from "@/src/payload-types";
 
@@ -13,10 +14,10 @@ export async function getCatalogItems(options?: {
     limit?: number;
     page?: number;
     category?: string;
-}): Promise<CatalogItem[]> {
+}): Promise<PaginatedDocs<CatalogItem>> {
     const payload = await getPayload({ config: configPromise });
 
-    const { docs } = await payload.find({
+    const result = await payload.find({
         collection: "catalog-items",
         limit: options?.limit || 10,
         page: options?.page || 1,
@@ -31,7 +32,7 @@ export async function getCatalogItems(options?: {
         depth: 2,
     });
 
-    return docs;
+    return result;
 }
 
 /**
