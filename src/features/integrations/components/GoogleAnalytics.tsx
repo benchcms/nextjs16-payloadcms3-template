@@ -1,23 +1,14 @@
 import Script from "next/script";
-import { getSettings } from "@/src/features/settings/queries/settings";
+
+interface GoogleAnalyticsProps {
+  gaId: string;
+}
 
 /**
- * Google Analytics component that conditionally loads GA scripts
- * when a Google Analytics ID is configured in Settings.
- *
- * This is a server component that fetches settings and only renders
- * the GA tracking scripts if googleAnalyticsId is present.
+ * Google Analytics tracking scripts.
+ * This component should be rendered by the parent Integrations component.
  */
-export default async function GoogleAnalytics() {
-  const settings = await getSettings();
-
-  // Don't render anything if GA ID is not configured
-  if (!settings.googleAnalyticsId) {
-    return null;
-  }
-
-  const gaId = settings.googleAnalyticsId;
-
+export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
   return (
     <>
       {/* Load the Google Analytics library */}

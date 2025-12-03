@@ -1,0 +1,12 @@
+{
+  "label": {
+    "en": "Integrations",
+    "fr": "Intégrations"
+  },
+  "fields": {
+    "googleAnalyticsId": {
+      "en": "Google Analytics ID",
+      "fr": "ID Google Analytics"
+    }
+  }
+}

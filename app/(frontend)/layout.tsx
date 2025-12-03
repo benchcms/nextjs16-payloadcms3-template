@@ -1,6 +1,5 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +16,6 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <GoogleAnalytics />
         {children}
       </body>
     </html>

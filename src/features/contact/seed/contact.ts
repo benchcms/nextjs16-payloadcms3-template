@@ -1,13 +1,13 @@
 import { Payload } from "payload";
 import { faker } from "@faker-js/faker";
 
-export async function seedSettings(payload: Payload) {
-  console.log("🌱 Seeding settings...");
+export async function seedContact(payload: Payload) {
+  console.log("🌱 Seeding contact...");
 
   await payload.updateGlobal({
-    slug: "settings",
+    slug: "contact",
     data: {
-      contact: {
+      info: {
         email: faker.internet.email(),
         phone: faker.phone.number(),
         address: faker.location.streetAddress(true),
@@ -18,9 +18,8 @@ export async function seedSettings(payload: Payload) {
         linkedin: `https://linkedin.com/company/${faker.internet.username()}`,
         twitter: `https://twitter.com/${faker.internet.username()}`,
       },
-      googleAnalyticsId: `G-${faker.string.alphanumeric(10).toUpperCase()}`,
     },
   });
 
-  console.log("✅ Settings seeded");
+  console.log("✅ Contact seeded");
 }

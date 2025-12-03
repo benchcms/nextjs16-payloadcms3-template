@@ -1,10 +1,10 @@
 {
   "label": {
-    "en": "Settings",
-    "fr": "Paramètres"
+    "en": "Contact",
+    "fr": "Contact"
   },
   "fields": {
-    "contact": {
+    "info": {
       "en": "Contact Information",
       "fr": "Informations de contact"
     },
@@ -39,14 +39,6 @@
     "twitter": {
       "en": "Twitter URL",
       "fr": "URL Twitter"
-    },
-    "settings": {
-      "en": "Settings",
-      "fr": "Paramètres"
-    },
-    "googleAnalyticsId": {
-      "en": "Google Analytics ID",
-      "fr": "ID Google Analytics"
     }
   }
 }

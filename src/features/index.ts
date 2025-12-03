@@ -6,13 +6,14 @@ import Media from "./media";
 import Admins from "./admins";
 import Events from "./events";
 import Catalog from "./catalog";
-import Settings from "./settings";
+import Contact from "./contact";
 import JobOffers from "./job-offers";
 import OpeningHours from "./opening-hours";
 import Testimonials from "./testimonials";
-import ContactEmails from "./contact-emails";
 import PressReleases from "./press-releases";
 import RestaurantMenu from "./restaurant-menu";
+
+import Integrations from "./integrations";
 
 type Seed = (payload: Payload) => Promise<void>;
 
@@ -22,7 +23,7 @@ export type Feature = {
   seeds: Seed[];
 };
 
-const mandatoryFeatures = [Admins, Settings, Media];
+const mandatoryFeatures = [Admins, Media];
 
 const features = [
   ...mandatoryFeatures,
@@ -30,11 +31,12 @@ const features = [
   Blog,
   Team,
   Events,
+  Contact,
   Catalog,
   JobOffers,
+  Integrations,
   OpeningHours,
   Testimonials,
-  ContactEmails,
   PressReleases,
   RestaurantMenu,
 ];

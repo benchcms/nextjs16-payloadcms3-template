@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     admins: Admin;
     media: Media;
+    'contact-emails': ContactEmail;
     faq: Faq;
     'blog-categories': BlogCategory;
     'blog-authors': BlogAuthor;
@@ -79,7 +80,6 @@ export interface Config {
     'catalog-items': CatalogItem;
     'job-offers': JobOffer;
     testimonials: Testimonial;
-    'contact-emails': ContactEmail;
     'press-releases': PressRelease;
     'restaurant-menu': RestaurantMenu;
     'payload-kv': PayloadKv;
@@ -91,6 +91,7 @@ export interface Config {
   collectionsSelect: {
     admins: AdminsSelect<false> | AdminsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     faq: FaqSelect<false> | FaqSelect<true>;
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
     'blog-authors': BlogAuthorsSelect<false> | BlogAuthorsSelect<true>;
@@ -101,7 +102,6 @@ export interface Config {
     'catalog-items': CatalogItemsSelect<false> | CatalogItemsSelect<true>;
     'job-offers': JobOffersSelect<false> | JobOffersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     'press-releases': PressReleasesSelect<false> | PressReleasesSelect<true>;
     'restaurant-menu': RestaurantMenuSelect<false> | RestaurantMenuSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -113,11 +113,13 @@ export interface Config {
     defaultIDType: number;
   };
   globals: {
-    settings: Setting;
+    integrations: Integration;
+    contact: Contact;
     'opening-hours': OpeningHour;
   };
   globalsSelect: {
-    settings: SettingsSelect<false> | SettingsSelect<true>;
+    integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
+    contact: ContactSelect<false> | ContactSelect<true>;
     'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
   };
   locale: null;
@@ -189,6 +191,21 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails".
+ */
+export interface ContactEmail {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  submittedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -464,21 +481,6 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-emails".
- */
-export interface ContactEmail {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string | null;
-  subject: string;
-  message: string;
-  submittedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "press-releases".
  */
 export interface PressRelease {
@@ -562,6 +564,10 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'contact-emails';
+        value: number | ContactEmail;
+      } | null)
+    | ({
         relationTo: 'faq';
         value: number | Faq;
       } | null)
@@ -600,10 +606,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'testimonials';
         value: number | Testimonial;
-      } | null)
-    | ({
-        relationTo: 'contact-emails';
-        value: number | ContactEmail;
       } | null)
     | ({
         relationTo: 'press-releases';
@@ -694,6 +696,20 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails_select".
+ */
+export interface ContactEmailsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  submittedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -875,20 +891,6 @@ export interface TestimonialsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-emails_select".
- */
-export interface ContactEmailsSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  phone?: T;
-  subject?: T;
-  message?: T;
-  submittedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "press-releases_select".
  */
 export interface PressReleasesSelect<T extends boolean = true> {
@@ -965,11 +967,21 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
+ * via the `definition` "integrations".
  */
-export interface Setting {
+export interface Integration {
   id: number;
-  contact?: {
+  googleAnalyticsId?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact".
+ */
+export interface Contact {
+  id: number;
+  info?: {
     email?: string | null;
     phone?: string | null;
     address?: string | null;
@@ -980,7 +992,6 @@ export interface Setting {
     linkedin?: string | null;
     twitter?: string | null;
   };
-  googleAnalyticsId?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1030,10 +1041,20 @@ export interface OpeningHour {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings_select".
+ * via the `definition` "integrations_select".
  */
-export interface SettingsSelect<T extends boolean = true> {
-  contact?:
+export interface IntegrationsSelect<T extends boolean = true> {
+  googleAnalyticsId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact_select".
+ */
+export interface ContactSelect<T extends boolean = true> {
+  info?:
     | T
     | {
         email?: T;
@@ -1048,7 +1069,6 @@ export interface SettingsSelect<T extends boolean = true> {
         linkedin?: T;
         twitter?: T;
       };
-  googleAnalyticsId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

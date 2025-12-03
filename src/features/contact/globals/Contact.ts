@@ -1,18 +1,17 @@
 import { GlobalConfig } from "payload";
+import i18n from "../i18n/contact.json";
 
-import i18n from "../i18n/settings.json";
-
-export const Settings: GlobalConfig = {
-  slug: "settings",
+export const Contact: GlobalConfig = {
+  slug: "contact",
   access: {
     read: ({ req: { user } }) => !!user,
   },
   label: i18n.label,
   fields: [
     {
-      name: "contact",
+      name: "info",
       type: "group",
-      label: i18n.fields.contact,
+      label: i18n.fields.info,
       fields: [
         {
           name: "email",
@@ -57,11 +56,6 @@ export const Settings: GlobalConfig = {
           label: i18n.fields.twitter,
         },
       ],
-    },
-    {
-      name: "googleAnalyticsId",
-      type: "text",
-      label: i18n.fields.googleAnalyticsId,
     },
   ],
 };
