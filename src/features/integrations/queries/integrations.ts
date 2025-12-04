@@ -1,5 +1,6 @@
 "use server";
 
+import { cache } from "react";
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
 import type { Integration } from "@/src/payload-types";
@@ -8,8 +9,11 @@ import type { Integration } from "@/src/payload-types";
 
 /**
  * Get third-party integration configurations (Google Analytics, etc.)
+ *
+ * This function is cached per-request to prevent redundant database queries
+ * when multiple integration components are used on the same page.
  */
-export async function getIntegrations(): Promise<Integration> {
+export const getIntegrations = cache(async (): Promise<Integration> => {
   const payload = await getPayload({ config: configPromise });
 
   const integrations = await payload.findGlobal({
@@ -17,4 +21,4 @@ export async function getIntegrations(): Promise<Integration> {
   });
 
   return integrations;
-}
+});

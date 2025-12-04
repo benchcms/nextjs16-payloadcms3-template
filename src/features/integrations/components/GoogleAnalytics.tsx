@@ -1,20 +1,25 @@
 import Script from "next/script";
-
-interface GoogleAnalyticsProps {
-  gaId: string;
-}
+import { getIntegrations } from "../queries/integrations";
 
 /**
  * Google Analytics tracking scripts.
- * This component should be rendered by the parent Integrations component.
+ * Automatically checks if GA is configured and only loads if ID is present.
+ *
+ * Usage: Import and place in layout.tsx or any page where you want GA tracking.
  */
-export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
+export default async function GoogleAnalytics() {
+  const integrations = await getIntegrations();
+
+  if (!integrations.googleAnalyticsId) {
+    return null;
+  }
+
   return (
     <>
       {/* Load the Google Analytics library */}
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${integrations.googleAnalyticsId}`}
       />
 
       {/* Initialize Google Analytics */}
@@ -23,7 +28,7 @@ export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gaId}');
+          gtag('config', '${integrations.googleAnalyticsId}');
         `}
       </Script>
     </>
