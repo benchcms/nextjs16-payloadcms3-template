@@ -1,0 +1,14 @@
+{
+  "label": {
+    "en": "Google Analytics",
+    "fr": "Google Analytics"
+  },
+  "fields": {
+    "id": {
+      "label": {
+        "en": "Measurement ID (G-XXXXXXXXXX)",
+        "fr": "ID de mesure (G-XXXXXXXXXX)"
+      }
+    }
+  }
+}

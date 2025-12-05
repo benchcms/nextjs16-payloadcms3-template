@@ -14,6 +14,7 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { Media } from "./core/collections/Media";
 import { Admins } from "./core/collections/Admins";
 import * as features from "@/src/features/config";
+import { Integrations } from "@/src/integrations/Integrations";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -93,9 +94,8 @@ function getS3Storage() {
     },
   });
 }
-
 // build globals and collections from features
-const globals = features.globals;
+const globals = [...features.globals, Integrations];
 const collections = [Admins, Media, ...features.collections];
 
 // get a plugin list with undefined ones filtered out.

@@ -116,14 +116,14 @@ export interface Config {
   globals: {
     contact: Contact;
     socials: Social;
-    integrations: Integration;
     'opening-hours': OpeningHour;
+    integrations: Integration;
   };
   globalsSelect: {
     contact: ContactSelect<false> | ContactSelect<true>;
     socials: SocialsSelect<false> | SocialsSelect<true>;
-    integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
     'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
+    integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
   };
   locale: null;
   user: Admin & {
@@ -995,16 +995,6 @@ export interface Social {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "integrations".
- */
-export interface Integration {
-  id: number;
-  googleAnalyticsId?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "opening-hours".
  */
 export interface OpeningHour {
@@ -1049,6 +1039,18 @@ export interface OpeningHour {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "integrations".
+ */
+export interface Integration {
+  id: number;
+  googleAnalytics?: {
+    id?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
@@ -1068,16 +1070,6 @@ export interface SocialsSelect<T extends boolean = true> {
   instagram?: T;
   linkedin?: T;
   twitter?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "integrations_select".
- */
-export interface IntegrationsSelect<T extends boolean = true> {
-  googleAnalyticsId?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1135,6 +1127,20 @@ export interface OpeningHoursSelect<T extends boolean = true> {
         open?: T;
         close?: T;
         isOpen?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "integrations_select".
+ */
+export interface IntegrationsSelect<T extends boolean = true> {
+  googleAnalytics?:
+    | T
+    | {
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

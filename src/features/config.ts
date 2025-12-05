@@ -7,7 +7,7 @@ import { catalogConfig } from "./catalog/config";
 import { contactConfig } from "./contact/config";
 import { socialsConfig } from "./socials/config";
 import { jobOffersConfig } from "./job-offers/config";
-import { integrationsConfig } from "./integrations/config";
+
 import { testimonialsConfig } from "./testimonials/config";
 import { openingHoursConfig } from "./opening-hours/config";
 import { pressReleasesConfig } from "./press-releases/config";
@@ -30,7 +30,7 @@ const features: Feature[] = [
   contactConfig,
   socialsConfig,
   jobOffersConfig,
-  integrationsConfig,
+
   testimonialsConfig,
   openingHoursConfig,
   pressReleasesConfig,

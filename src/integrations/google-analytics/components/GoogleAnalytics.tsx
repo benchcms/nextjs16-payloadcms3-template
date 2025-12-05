@@ -1,16 +1,18 @@
 import Script from "next/script";
-import { getIntegrations } from "../queries/integrations";
+import { getIntegrations } from "../../queries";
 
 /**
  * Google Analytics tracking scripts.
  * Automatically checks if GA is configured and only loads if ID is present.
- *
- * Usage: Import and place in layout.tsx or any page where you want GA tracking.
  */
-export default async function GoogleAnalytics() {
+export async function GoogleAnalytics() {
   const integrations = await getIntegrations();
 
-  if (!integrations.googleAnalyticsId) {
+  // Access the grouped settings
+  // @ts-ignore - Types will be fixed after regeneration
+  const settings = integrations.googleAnalytics;
+
+  if (!settings?.id) {
     return null;
   }
 
@@ -19,7 +21,7 @@ export default async function GoogleAnalytics() {
       {/* Load the Google Analytics library */}
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${integrations.googleAnalyticsId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${settings.id}`}
       />
 
       {/* Initialize Google Analytics */}
@@ -28,7 +30,7 @@ export default async function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${integrations.googleAnalyticsId}');
+          gtag('config', '${settings.id}');
         `}
       </Script>
     </>
