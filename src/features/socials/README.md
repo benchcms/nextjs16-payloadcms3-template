@@ -4,13 +4,17 @@
 
 The Socials feature manages the business's social media links. It provides a central location to configure URLs for Facebook, Instagram, LinkedIn, and Twitter.
 
+## Types
+
+- **`Socials`**: Global social media links configuration.
+
 ## Queries (Read Operations)
 
-### `getSocials(): Promise<Social>`
+### `getSocials(): Promise<Socials>`
 
 Get the global social media links.
 
-- **Returns**: `Promise<Social>` - Object containing social media URLs.
+- **Returns**: `Promise<Socials>` - Object containing social media URLs.
 
 ## UI Components to Create
 
@@ -26,7 +30,7 @@ Get the global social media links.
 
 ## Data Display Guidelines
 
-### Social Media (`Social`)
+### Social Media (`Socials`)
 
 - **`facebook`** (text): Facebook URL. Display with Facebook icon.
 - **`instagram`** (text): Instagram URL. Display with Instagram icon.

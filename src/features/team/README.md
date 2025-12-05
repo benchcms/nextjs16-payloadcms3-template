@@ -4,6 +4,11 @@
 
 The Team feature manages groups of team members (e.g., "Management", "Kitchen Staff"). It allows displaying team members organized by these groups.
 
+## Types
+
+- **`Team`**: A team group with name, slug, order, and a list of members.
+- **`TeamMember`**: Individual team member with name, role, photo, bio, and social links.
+
 ## Queries (Read Operations)
 
 ### `getTeamGroups(): Promise<Team[]>`
@@ -51,7 +56,7 @@ Get a single team group by its slug.
 **Component**: `TeamMemberCard`
 
 - **Purpose**: Display individual member details
-- **Props**: `{ member: NonNullable<Team['items']>[number] }`
+- **Props**: `{ member: TeamMember }`
 - **Must Include**:
   - Photo (if available)
   - Name
@@ -68,7 +73,7 @@ Get a single team group by its slug.
 - **`order`** (number): Sort order.
 - **`slug`** (string): URL slug.
 
-### Team Member (`Team['items'][number]`)
+### Team Member (`TeamMember`)
 
 - **`name`** (string): Member's full name.
 - **`role`** (string): Job title.

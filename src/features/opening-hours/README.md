@@ -4,6 +4,11 @@
 
 The Opening Hours feature manages the business operating hours for each day of the week. It is a global setting.
 
+## Types
+
+- **`OpeningHours`**: Weekly opening hours schedule with start date for scheduling.
+- **`DaySchedule`**: Individual day schedule with open/close times and isOpen flag.
+
 ## Queries (Read Operations)
 
 ### Data Structure
@@ -45,7 +50,7 @@ const openingHours = await getOpeningHours();
 **Component**: `OpeningHoursList`
 
 - **Purpose**: Display the weekly schedule
-- **Props**: `{ hours: OpeningHour }`
+- **Props**: `{ hours: OpeningHours }`
 - **Structure**:
   - Loop through days (Monday - Sunday)
   - Show "Closed" if `isOpen` is false
@@ -54,17 +59,16 @@ const openingHours = await getOpeningHours();
 **Component**: `TodayStatus`
 
 - **Purpose**: Show if currently open/closed
-- **Props**: `{ hours: OpeningHour }`
+- **Props**: `{ hours: OpeningHours }`
 - **Logic**: Determine current day and check status
 
 ## Data Display Guidelines
 
-### Opening Hour Object (`OpeningHour`)
+### Opening Hours (`OpeningHours`)
 
-- **`monday`**, **`tuesday`**, **`wednesday`**, **`thursday`**, **`friday`**, **`saturday`**, **`sunday`** (group): Day objects.
-- **`slug`** (string): Global slug.
+- **`monday`**, **`tuesday`**, **`wednesday`**, **`thursday`**, **`friday`**, **`saturday`**, **`sunday`** (`DaySchedule`): Day schedules.
 
-### Day Object
+### Day Schedule (`DaySchedule`)
 
 - **`isOpen`** (boolean): If false, display "Closed".
 - **`open`** (string): Opening time (e.g., "09:00").

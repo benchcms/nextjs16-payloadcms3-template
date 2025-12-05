@@ -4,6 +4,13 @@
 
 The Blog feature manages blog posts, categories, and authors. It allows displaying a list of posts, filtering by category/author, and showing individual post details.
 
+## Types
+
+- **`BlogPost`**: Blog post with title, featured image, excerpt, content, author, category, and tags.
+- **`BlogAuthor`**: Blog author with name, bio, and icon.
+- **`BlogCategory`**: Blog category with name, description, and icon.
+- **`BlogTag`**: Tag for blog posts.
+
 ## Queries (Read Operations)
 
 ### `getBlogPosts(options?): Promise<PaginatedDocs<BlogPost>>`

@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
-import type { CatalogItem, CatalogCategory } from "@/src/payload-types";
+import type { CatalogItem, CatalogCategory } from "../types";
 
 // PUBLIC API
 
@@ -32,7 +32,7 @@ export async function getCatalogItems(options?: {
     depth: 2,
   });
 
-  return result;
+  return result as PaginatedDocs<CatalogItem>;
 }
 
 /**
@@ -54,7 +54,7 @@ export async function getCatalogItem(
     depth: 2,
   });
 
-  return docs[0] || null;
+  return (docs[0] as CatalogItem) || null;
 }
 
 /**
@@ -73,7 +73,7 @@ export async function getRootCatalogCategories(): Promise<CatalogCategory[]> {
     sort: "order",
   });
 
-  return docs;
+  return docs as CatalogCategory[];
 }
 
 /**
@@ -97,7 +97,7 @@ export async function getCatalogSubCategories(
     sort: "order",
   });
 
-  return docs;
+  return docs as CatalogCategory[];
 }
 
 /**
@@ -119,5 +119,5 @@ export async function getCatalogCategory(
     depth: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as CatalogCategory) || null;
 }

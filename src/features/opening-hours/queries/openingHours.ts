@@ -3,7 +3,7 @@
 import { cache } from "react";
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { OpeningHour } from "@/src/payload-types";
+import type { OpeningHours } from "../types";
 
 // PUBLIC API
 
@@ -13,7 +13,7 @@ import type { OpeningHour } from "@/src/payload-types";
  * This function is cached per-request to prevent redundant database queries
  * when multiple components need opening hours data on the same page.
  */
-export const getOpeningHours = cache(async (): Promise<OpeningHour | null> => {
+export const getOpeningHours = cache(async (): Promise<OpeningHours | null> => {
   const payload = await getPayload({ config: configPromise });
 
   const { docs } = await payload.find({
@@ -27,5 +27,5 @@ export const getOpeningHours = cache(async (): Promise<OpeningHour | null> => {
     limit: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as OpeningHours) || null;
 });

@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs, Where } from "payload";
 import configPromise from "@/src/payload.config";
-import type { BlogPost, BlogAuthor, BlogCategory } from "@/src/payload-types";
+import type { BlogPost, BlogAuthor, BlogCategory } from "../types";
 
 // PUBLIC API
 
@@ -38,7 +38,7 @@ export async function getBlogPosts(options?: {
     depth: 2,
   });
 
-  return result;
+  return result as PaginatedDocs<BlogPost>;
 }
 
 /**
@@ -58,7 +58,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
     depth: 2,
   });
 
-  return docs[0] || null;
+  return (docs[0] as BlogPost) || null;
 }
 
 /**
@@ -72,7 +72,7 @@ export async function getBlogCategories(): Promise<BlogCategory[]> {
     sort: "order",
   });
 
-  return docs;
+  return docs as BlogCategory[];
 }
 
 /**
@@ -86,7 +86,7 @@ export async function getBlogAuthors(): Promise<BlogAuthor[]> {
     sort: "order",
   });
 
-  return docs;
+  return docs as BlogAuthor[];
 }
 
 /**
@@ -106,7 +106,7 @@ export async function getBlogAuthor(slug: string): Promise<BlogAuthor | null> {
     depth: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as BlogAuthor) || null;
 }
 
 /**
@@ -127,7 +127,7 @@ export async function getBlogCategory(
     limit: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as BlogCategory) || null;
 }
 
 /**

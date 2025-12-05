@@ -4,6 +4,10 @@
 
 The Testimonials feature manages client reviews and feedback.
 
+## Types
+
+- **`Testimonial`**: Client testimonial with quote, client name, company, rating, photo, and date.
+
 ## Queries (Read Operations)
 
 ### `getTestimonials(options?): Promise<PaginatedDocs<Testimonial>>`

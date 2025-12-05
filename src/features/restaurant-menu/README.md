@@ -4,6 +4,12 @@
 
 The Restaurant Menu feature manages menu categories (e.g., "Starters", "Main Courses") and their dishes. It allows displaying the full menu organized by category.
 
+## Types
+
+- **`RestaurantMenu`**: Menu category with name, slug, order, and list of menu items.
+- **`MenuItem`**: Individual dish with name, description, price, image, dietary info, and spicy level.
+- **`SpicyLevel`**: Type alias for spicy level options ("none" | "mild" | "medium" | "hot" | "extra-hot" | "skull").
+
 ## Queries (Read Operations)
 
 ### `getMenuCategories(): Promise<RestaurantMenu[]>`
@@ -51,7 +57,7 @@ Get a single menu category by its slug.
 **Component**: `MenuItem`
 
 - **Purpose**: Display individual dish details
-- **Props**: `{ item: NonNullable<RestaurantMenu['items']>[number] }`
+- **Props**: `{ item: MenuItem }`
 - **Must Include**:
   - Name
   - Description
@@ -69,7 +75,7 @@ Get a single menu category by its slug.
 - **`order`** (number): Sort order.
 - **`slug`** (string): URL slug.
 
-### Menu Item (`RestaurantMenu['items'][number]`)
+### Menu Item (`MenuItem`)
 
 - **`name`** (string): Dish name.
 - **`description`** (textarea): Dish description.

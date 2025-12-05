@@ -4,6 +4,10 @@
 
 The Job Offers feature manages job listings. It allows displaying a list of active job openings and detailed job descriptions.
 
+## Types
+
+- **`JobOffer`**: Job listing with title, description, requirements, location, salary, and application link.
+
 ## Queries (Read Operations)
 
 ### `getActiveJobOffers(options?): Promise<PaginatedDocs<JobOffer>>`

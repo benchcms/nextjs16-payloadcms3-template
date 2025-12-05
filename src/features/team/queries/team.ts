@@ -2,7 +2,7 @@
 
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { Team } from "@/src/payload-types";
+import type { Team } from "../types";
 
 // PUBLIC API
 
@@ -18,7 +18,7 @@ export async function getTeamGroups(): Promise<Team[]> {
     depth: 2,
   });
 
-  return docs;
+  return docs as Team[];
 }
 
 /**
@@ -38,5 +38,5 @@ export async function getTeamGroup(slug: string): Promise<Team | null> {
     depth: 2,
   });
 
-  return docs[0] || null;
+  return (docs[0] as Team) || null;
 }

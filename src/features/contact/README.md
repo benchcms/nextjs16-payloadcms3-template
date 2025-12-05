@@ -4,6 +4,12 @@
 
 The Contact feature manages the business's contact information, social media links, and contact form submissions. It serves as the central source for all contact-related data.
 
+## Types
+
+- **`Contact`**: Global contact information (email, phone, address).
+- **`ContactFormData`**: Input data for contact form submissions.
+- **`ContactFormState`**: Return state from contact form action.
+
 ## Queries (Read Operations)
 
 ### `getContact(): Promise<Contact>`

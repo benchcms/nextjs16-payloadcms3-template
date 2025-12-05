@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
-import type { Event } from "@/src/payload-types";
+import type { Event } from "../types";
 
 // PUBLIC API
 
@@ -30,7 +30,7 @@ export async function getUpcomingEvents(options?: {
     depth: 1,
   });
 
-  return docs;
+  return docs as Event[];
 }
 
 /**
@@ -51,7 +51,7 @@ export async function getEvents(options?: {
     depth: 1,
   });
 
-  return result;
+  return result as PaginatedDocs<Event>;
 }
 
 /**
@@ -71,5 +71,5 @@ export async function getEvent(slug: string): Promise<Event | null> {
     depth: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as Event) || null;
 }

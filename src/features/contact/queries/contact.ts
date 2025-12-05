@@ -3,7 +3,7 @@
 import { cache } from "react";
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { Contact } from "@/src/payload-types";
+import type { Contact } from "../types";
 
 /**
  * Get contact information and social media links

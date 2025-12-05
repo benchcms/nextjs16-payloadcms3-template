@@ -2,7 +2,7 @@
 
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { Faq } from "@/src/payload-types";
+import type { Faq } from "../types";
 
 // PUBLIC API
 
@@ -18,7 +18,7 @@ export async function getFAQGroups(): Promise<Faq[]> {
     depth: 2,
   });
 
-  return docs;
+  return docs as Faq[];
 }
 
 /**
@@ -38,5 +38,5 @@ export async function getFAQGroup(slug: string): Promise<Faq | null> {
     depth: 2,
   });
 
-  return docs[0] || null;
+  return (docs[0] as Faq) || null;
 }

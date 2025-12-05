@@ -2,7 +2,7 @@
 
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import type { RestaurantMenu } from "@/src/payload-types";
+import type { RestaurantMenu } from "../types";
 
 // PUBLIC API
 
@@ -18,7 +18,7 @@ export async function getMenuCategories(): Promise<RestaurantMenu[]> {
     depth: 2,
   });
 
-  return docs;
+  return docs as RestaurantMenu[];
 }
 
 /**
@@ -40,5 +40,5 @@ export async function getMenuCategory(
     depth: 2,
   });
 
-  return docs[0] || null;
+  return (docs[0] as RestaurantMenu) || null;
 }

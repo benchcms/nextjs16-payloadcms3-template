@@ -4,6 +4,11 @@
 
 The FAQ (Frequently Asked Questions) feature manages groups of questions and answers. It allows displaying FAQs organized by categories (groups).
 
+## Types
+
+- **`Faq`**: A FAQ group with name, slug, order, and a list of items.
+- **`FaqItem`**: Individual Q&A pair with question and answer (richText).
+
 ## Queries (Read Operations)
 
 ### `getFAQGroups(): Promise<Faq[]>`
@@ -43,7 +48,7 @@ Get a single FAQ group by its slug.
 **Component**: `FaqAccordion`
 
 - **Purpose**: Display a list of questions and answers with expand/collapse functionality
-- **Props**: `{ items: NonNullable<Faq['items']> }`
+- **Props**: `{ items: FaqItem[] }`
 - **Structure**:
   - List of items
   - Click to expand answer
@@ -58,7 +63,7 @@ Get a single FAQ group by its slug.
 - **`order`** (number): Sort order.
 - **`slug`** (string): URL slug.
 
-### FAQ Item (`Faq['items'][number]`)
+### FAQ Item (`FaqItem`)
 
 - **`question`** (string): The question text.
 - **`answer`** (richText): The answer content. Use a Rich Text renderer.

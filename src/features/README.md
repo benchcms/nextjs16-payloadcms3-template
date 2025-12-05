@@ -12,7 +12,14 @@ Every feature `README.md` must follow this exact structure:
 
 Brief description of what the feature does.
 
-### 2. Queries (Read Operations)
+### 2. Types
+
+List all TypeScript types exported from `types.ts`.
+
+- **Format**: `TypeName` - Brief description
+- This section documents the custom types available for the frontend agent to import.
+
+### 3. Queries (Read Operations)
 
 _Only if applicable._
 List all public query functions exported from `queries/*.ts`.
@@ -21,7 +28,7 @@ List all public query functions exported from `queries/*.ts`.
 - **Description**: What it fetches.
 - **Slug Queries**: Explicitly mention if a query by slug (e.g., `getCategory(slug)`) allows displaying a specific group/item on _any_ page (flexible placement).
 
-### 3. Mutations (Write Operations)
+### 4. Mutations (Write Operations)
 
 _Only if applicable._
 
@@ -29,7 +36,7 @@ _Only if applicable._
 - **Validation**: Explicitly reference the Zod schema from `mutations/schema.ts`.
 - **Instruction**: Tell the agent to use this schema for client-side validation.
 
-### 4. UI Components to Create
+### 5. UI Components to Create
 
 List the views and components the agent should build.
 
@@ -37,7 +44,7 @@ List the views and components the agent should build.
 - **Placement**: Explicitly state "Dedicated page OR section on Home/About page" where appropriate.
 - **Code Examples**: Only include code examples for complex form logic, mutations, or multi-step workflows where an end-to-end example materially clarifies usage. For simple display components, let the agent use its templates.
 
-### 5. Data Display Guidelines
+### 6. Data Display Guidelines
 
 List the key data types and how to display their fields.
 
@@ -54,6 +61,10 @@ List the key data types and how to display their fields.
 ## Overview
 
 Description...
+
+## Types
+
+- **`Item`**: Item with name and image.
 
 ## Queries
 

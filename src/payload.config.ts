@@ -105,7 +105,7 @@ const plugins = [getS3Storage()].filter((p) => p !== undefined);
 export default buildConfig({
   secret: PAYLOAD_SECRET,
   typescript: {
-    outputFile: path.resolve(dirname, "payload-types.ts"),
+    autoGenerate: false,
   },
   db: postgresAdapter({
     pool: {

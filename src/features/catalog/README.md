@@ -4,6 +4,12 @@
 
 The Catalog feature manages catalog categories and items. It allows displaying a hierarchical catalog with categories and subcategories, and items with pricing, specifications, and galleries.
 
+## Types
+
+- **`CatalogItem`**: Catalog item with name, gallery, price, description, specifications, and related items.
+- **`CatalogCategory`**: Catalog category with name, description, image, and parent category.
+- **`Specification`**: Name-value pair for item specifications.
+
 ## Queries (Read Operations)
 
 ### `getCatalogItems(options?): Promise<PaginatedDocs<CatalogItem>>`

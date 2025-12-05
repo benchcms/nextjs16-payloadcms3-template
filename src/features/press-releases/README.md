@@ -4,6 +4,10 @@
 
 The Press Releases feature manages company news and announcements.
 
+## Types
+
+- **`PressRelease`**: News/announcement with title, journal, excerpt, link, and published date.
+
 ## Queries (Read Operations)
 
 ### `getPressReleases(options?): Promise<PaginatedDocs<PressRelease>>`

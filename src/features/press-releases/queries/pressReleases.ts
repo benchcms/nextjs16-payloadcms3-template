@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
-import type { PressRelease } from "@/src/payload-types";
+import type { PressRelease } from "../types";
 
 // PUBLIC API
 
@@ -25,7 +25,7 @@ export async function getPressReleases(options?: {
     depth: 1,
   });
 
-  return result;
+  return result as PaginatedDocs<PressRelease>;
 }
 
 /**
@@ -47,5 +47,5 @@ export async function getPressRelease(
     depth: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as PressRelease) || null;
 }

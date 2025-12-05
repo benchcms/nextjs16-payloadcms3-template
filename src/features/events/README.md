@@ -4,6 +4,10 @@
 
 The Events feature manages upcoming events, workshops, or gatherings. It allows listing events, showing details for a specific event, and handling event registration links.
 
+## Types
+
+- **`Event`**: Event with title, date, location, image, description, and registration links.
+
 ## Queries (Read Operations)
 
 ### `getUpcomingEvents(options?): Promise<Event[]>`

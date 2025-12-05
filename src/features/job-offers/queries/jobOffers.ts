@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
-import type { JobOffer } from "@/src/payload-types";
+import type { JobOffer } from "../types";
 
 // PUBLIC API
 
@@ -30,7 +30,7 @@ export async function getActiveJobOffers(options?: {
     depth: 1,
   });
 
-  return result;
+  return result as PaginatedDocs<JobOffer>;
 }
 
 /**
@@ -51,7 +51,7 @@ export async function getJobOffers(options?: {
     depth: 1,
   });
 
-  return result;
+  return result as PaginatedDocs<JobOffer>;
 }
 
 /**
@@ -71,5 +71,5 @@ export async function getJobOffer(slug: string): Promise<JobOffer | null> {
     depth: 1,
   });
 
-  return docs[0] || null;
+  return (docs[0] as JobOffer) || null;
 }

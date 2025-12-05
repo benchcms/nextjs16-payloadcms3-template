@@ -3,7 +3,7 @@
 import { getPayload } from "payload";
 import type { PaginatedDocs } from "payload";
 import configPromise from "@/src/payload.config";
-import type { Testimonial } from "@/src/payload-types";
+import type { Testimonial } from "../types";
 
 // PUBLIC API
 
@@ -25,5 +25,5 @@ export async function getTestimonials(options?: {
     depth: 1,
   });
 
-  return result;
+  return result as PaginatedDocs<Testimonial>;
 }
