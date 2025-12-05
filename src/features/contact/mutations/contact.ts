@@ -64,7 +64,7 @@ export function createContactFormAction(
         slug: "contact",
       });
 
-      const recipientEmail = contactGlobal.info?.email;
+      const recipientEmail = contactGlobal.email;
 
       if (!recipientEmail) {
         throw new Error(

@@ -115,11 +115,13 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     contact: Contact;
+    socials: Social;
     integrations: Integration;
     'opening-hours': OpeningHour;
   };
   globalsSelect: {
     contact: ContactSelect<false> | ContactSelect<true>;
+    socials: SocialsSelect<false> | SocialsSelect<true>;
     integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
     'opening-hours': OpeningHoursSelect<false> | OpeningHoursSelect<true>;
   };
@@ -972,17 +974,22 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Contact {
   id: number;
-  info?: {
-    email?: string | null;
-    phone?: string | null;
-    address?: string | null;
-  };
-  socials?: {
-    facebook?: string | null;
-    instagram?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-  };
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "socials".
+ */
+export interface Social {
+  id: number;
+  facebook?: string | null;
+  instagram?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1045,21 +1052,22 @@ export interface OpeningHour {
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
-  info?:
-    | T
-    | {
-        email?: T;
-        phone?: T;
-        address?: T;
-      };
-  socials?:
-    | T
-    | {
-        facebook?: T;
-        instagram?: T;
-        linkedin?: T;
-        twitter?: T;
-      };
+  email?: T;
+  phone?: T;
+  address?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "socials_select".
+ */
+export interface SocialsSelect<T extends boolean = true> {
+  facebook?: T;
+  instagram?: T;
+  linkedin?: T;
+  twitter?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

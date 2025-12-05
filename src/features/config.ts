@@ -5,6 +5,7 @@ import { teamConfig } from "./team/config";
 import { eventsConfig } from "./events/config";
 import { catalogConfig } from "./catalog/config";
 import { contactConfig } from "./contact/config";
+import { socialsConfig } from "./socials/config";
 import { jobOffersConfig } from "./job-offers/config";
 import { integrationsConfig } from "./integrations/config";
 import { testimonialsConfig } from "./testimonials/config";
@@ -27,6 +28,7 @@ const features: Feature[] = [
   eventsConfig,
   catalogConfig,
   contactConfig,
+  socialsConfig,
   jobOffersConfig,
   integrationsConfig,
   testimonialsConfig,

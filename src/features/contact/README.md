@@ -30,7 +30,7 @@ Creates a Server Action for contact form submissions compatible with `useActionS
   - Use this schema for frontend form validation
   - The schema is exported and can be imported in client components
 
-- **Email Configuration**: Contact form submissions are sent to the email configured in the Contact global (`info.email` field). This field must be set in the admin panel for contact form submissions to work.
+- **Email Configuration**: Contact form submissions are sent to the email configured in the Contact global (`email` field). This field must be set in the admin panel for contact form submissions to work.
 
 - **Returns**: Server Action compatible with `useActionState`
   - Returns `ContactFormState` (discriminated union):
@@ -50,8 +50,6 @@ Creates a Server Action for contact form submissions compatible with `useActionS
   - `getContact()` (for contact info, address, phone, email)
   - `createContactFormAction` mutation (for form submission)
 - **Layout**: Two-column layout (contact info + form)
-- **Special Notes**:
-  - **Social Links**: Display social icons using `contact.socials`.
 
 ### Components
 
@@ -76,18 +74,11 @@ Creates a Server Action for contact form submissions compatible with `useActionS
 
 ## Data Display Guidelines
 
-### Contact Info (`Contact.info`)
+### Contact Info (`Contact`)
 
 - **`email`** (email): Display as `mailto:` link.
 - **`phone`** (text): Display as `tel:` link.
 - **`address`** (textarea): Display with line breaks preserved.
-
-### Social Media (`Contact.socials`)
-
-- **`facebook`** (text): Facebook URL.
-- **`instagram`** (text): Instagram URL.
-- **`linkedin`** (text): LinkedIn URL.
-- **`twitter`** (text): Twitter URL.
 
 ### Contact Email (`ContactEmail`) - _For Admin/Internal Use_
 

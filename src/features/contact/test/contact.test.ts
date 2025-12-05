@@ -7,8 +7,9 @@ describe("Contact queries", () => {
     it("returns contact settings", async () => {
       const result = await getContact();
       expect(result).toBeDefined();
-      expect(result.info).toBeDefined();
-      expect(result.socials).toBeDefined();
+      expect(result.email).toBeDefined();
+      expect(result.phone).toBeDefined();
+      expect(result.address).toBeDefined();
     });
   });
 });

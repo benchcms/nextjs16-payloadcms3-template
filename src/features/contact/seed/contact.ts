@@ -7,17 +7,9 @@ export async function seedContact(payload: Payload) {
   await payload.updateGlobal({
     slug: "contact",
     data: {
-      info: {
-        email: faker.internet.email(),
-        phone: faker.phone.number(),
-        address: faker.location.streetAddress(true),
-      },
-      socials: {
-        facebook: `https://facebook.com/${faker.internet.username()}`,
-        instagram: `https://instagram.com/${faker.internet.username()}`,
-        linkedin: `https://linkedin.com/company/${faker.internet.username()}`,
-        twitter: `https://twitter.com/${faker.internet.username()}`,
-      },
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      address: faker.location.streetAddress(true),
     },
   });
 

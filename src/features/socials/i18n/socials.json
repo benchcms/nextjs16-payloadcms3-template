@@ -1,0 +1,24 @@
+{
+  "label": {
+    "en": "Socials",
+    "fr": "Réseaux sociaux"
+  },
+  "fields": {
+    "facebook": {
+      "en": "Facebook URL",
+      "fr": "URL Facebook"
+    },
+    "instagram": {
+      "en": "Instagram URL",
+      "fr": "URL Instagram"
+    },
+    "linkedin": {
+      "en": "LinkedIn URL",
+      "fr": "URL LinkedIn"
+    },
+    "twitter": {
+      "en": "Twitter URL",
+      "fr": "URL Twitter"
+    }
+  }
+}
