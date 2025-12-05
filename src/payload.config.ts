@@ -11,7 +11,9 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 
-import { globals, collections } from "@/src/features/config";
+import { Media } from "./core/collections/Media";
+import { Admins } from "./core/collections/Admins";
+import * as features from "@/src/features/config";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -91,6 +93,10 @@ function getS3Storage() {
     },
   });
 }
+
+// build globals and collections from features
+const globals = features.globals;
+const collections = [Admins, Media, ...features.collections];
 
 // get a plugin list with undefined ones filtered out.
 const plugins = [getS3Storage()].filter((p) => p !== undefined);

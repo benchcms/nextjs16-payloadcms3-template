@@ -75,9 +75,9 @@ export interface Config {
     'blog-posts': BlogPost;
     team: Team;
     events: Event;
-    'contact-emails': ContactEmail;
     'catalog-categories': CatalogCategory;
     'catalog-items': CatalogItem;
+    'contact-emails': ContactEmail;
     'job-offers': JobOffer;
     testimonials: Testimonial;
     'press-releases': PressRelease;
@@ -97,9 +97,9 @@ export interface Config {
     'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     team: TeamSelect<false> | TeamSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
-    'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     'catalog-categories': CatalogCategoriesSelect<false> | CatalogCategoriesSelect<true>;
     'catalog-items': CatalogItemsSelect<false> | CatalogItemsSelect<true>;
+    'contact-emails': ContactEmailsSelect<false> | ContactEmailsSelect<true>;
     'job-offers': JobOffersSelect<false> | JobOffersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     'press-releases': PressReleasesSelect<false> | PressReleasesSelect<true>;
@@ -353,21 +353,6 @@ export interface Event {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-emails".
- */
-export interface ContactEmail {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string | null;
-  subject: string;
-  message: string;
-  submittedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "catalog-categories".
  */
 export interface CatalogCategory {
@@ -416,6 +401,21 @@ export interface CatalogItem {
   relatedItems?: (number | CatalogItem)[] | null;
   slug: string;
   order: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails".
+ */
+export interface ContactEmail {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  submittedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -588,16 +588,16 @@ export interface PayloadLockedDocument {
         value: number | Event;
       } | null)
     | ({
-        relationTo: 'contact-emails';
-        value: number | ContactEmail;
-      } | null)
-    | ({
         relationTo: 'catalog-categories';
         value: number | CatalogCategory;
       } | null)
     | ({
         relationTo: 'catalog-items';
         value: number | CatalogItem;
+      } | null)
+    | ({
+        relationTo: 'contact-emails';
+        value: number | ContactEmail;
       } | null)
     | ({
         relationTo: 'job-offers';
@@ -810,20 +810,6 @@ export interface EventsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-emails_select".
- */
-export interface ContactEmailsSelect<T extends boolean = true> {
-  name?: T;
-  email?: T;
-  phone?: T;
-  subject?: T;
-  message?: T;
-  submittedAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "catalog-categories_select".
  */
 export interface CatalogCategoriesSelect<T extends boolean = true> {
@@ -856,6 +842,20 @@ export interface CatalogItemsSelect<T extends boolean = true> {
   relatedItems?: T;
   slug?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-emails_select".
+ */
+export interface ContactEmailsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  submittedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
