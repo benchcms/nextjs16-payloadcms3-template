@@ -1,4 +1,4 @@
-import { Feature } from "../types";
+import { Feature } from "../config";
 import { seedOpeningHours } from "./seed/openingHours";
 import { OpeningHours } from "./globals/OpeningHours";
 

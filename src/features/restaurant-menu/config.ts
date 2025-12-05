@@ -1,4 +1,4 @@
-import { Feature } from "../types";
+import { Feature } from "../config";
 import { seedRestaurantMenu } from "./seed/restaurantMenu";
 import { RestaurantMenu } from "./collections/RestaurantMenu";
 

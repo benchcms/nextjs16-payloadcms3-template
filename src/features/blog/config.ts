@@ -1,4 +1,4 @@
-import { Feature } from "../types";
+import { Feature } from "../config";
 import { seedBlog } from "./seed/blog";
 import { BlogPosts } from "./collections/BlogPosts";
 import { BlogAuthors } from "./collections/BlogAuthors";
