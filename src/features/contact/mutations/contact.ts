@@ -1,20 +1,23 @@
-"use server";
-
 import { z } from "zod";
-import { getPayload } from "payload";
-import configPromise from "@/src/payload.config";
 import {
   contactFormSchema,
   type ContactFormState,
   type EmailTemplateGenerator,
 } from "./schema";
+import { submitContactForm } from "./submit";
 
 // PUBLIC API
 
 /**
  * Creates a Server Action for contact form submissions compatible with useActionState.
  *
- * @param generateEmailHtml - Function that generates the email HTML template from validated form data
+ * This is a factory function that runs on the client and orchestrates the flow:
+ * 1. Validates form data on the client
+ * 2. Generates HTML email template using the provided generator function
+ * 3. Calls a server function to handle database storage and email sending
+ *
+ * @param generateEmailHtml - Function that generates the HTML email template from validated form data.
+ *                            Must return an HTML string (not a function).
  * @returns Server Action compatible with useActionState
  *
  * See README.md for usage examples.
@@ -36,7 +39,7 @@ export function createContactFormAction(
         message: formData.get("message"),
       };
 
-      // Validate form data
+      // Validate form data (client-side)
       const formValidation = contactFormSchema.safeParse(rawData);
 
       if (!formValidation.success) {
@@ -54,44 +57,12 @@ export function createContactFormAction(
 
       const validatedData = formValidation.data;
 
-      // Generate email HTML using the provided template generator
+      // Generate email HTML using the provided template generator (client-side)
       const emailHtml = generateEmailHtml(validatedData);
 
-      const payload = await getPayload({ config: configPromise });
-
-      // 1. Fetch contact global to get recipient email
-      const contactGlobal = await payload.findGlobal({
-        slug: "contact",
-      });
-
-      const recipientEmail = contactGlobal.email;
-
-      if (!recipientEmail) {
-        throw new Error(
-          "Contact email not configured. Please set the email in the Contact global settings.",
-        );
-      }
-
-      // 2. Save to database
-      const doc = await payload.create({
-        collection: "contact-emails",
-        data: {
-          name: validatedData.name,
-          email: validatedData.email,
-          phone: validatedData.phone,
-          subject: validatedData.subject,
-          message: validatedData.message,
-        },
-      });
-
-      // 3. Send email with generated HTML
-      await payload.sendEmail({
-        to: recipientEmail,
-        subject: `New Contact: ${validatedData.subject}`,
-        html: emailHtml,
-      });
-
-      return { success: true, id: doc.id };
+      // Call server function to handle database storage and email sending
+      const result = await submitContactForm(validatedData, emailHtml);
+      return result;
     } catch (error) {
       console.error("Failed to submit contact email:", error);
       return {
