@@ -45,11 +45,11 @@ Get all blog authors.
 
 Get a single blog author by slug.
 
-### `getBlogPostsByAuthor(authorSlug: string, limit?: number): Promise<BlogPost[]>`
+### `getBlogPostsByAuthor(authorSlug: string, limit?: number): Promise<PaginatedDocs<BlogPost>>`
 
 Get blog posts for a specific author.
 
-### `getBlogPostsByCategory(categorySlug: string, limit?: number): Promise<BlogPost[]>`
+### `getBlogPostsByCategory(categorySlug: string, limit?: number): Promise<PaginatedDocs<BlogPost>>`
 
 Get blog posts for a specific category.
 
