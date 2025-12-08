@@ -2,57 +2,56 @@
 
 ## Overview
 
-The Contact feature manages the business's contact information, social media links, and contact form submissions. It serves as the central source for all contact-related data.
+The Contact feature manages the business's contact information and contact form submissions. It provides a query to retrieve global contact data and a factory function to create a server action for contact form submissions.
 
 ## Types
 
 - **`Contact`**: Global contact information (email, phone, address).
 
-## Queries (Read Operations)
+## Queries
 
 ### `getContact(): Promise<Contact>`
 
-Get the global contact information and social media links.
+Get the global contact information.
 
-- **Returns**: `Promise<Contact>` - Object containing contact info and socials
-
-## Mutations (Write Operations)
+## Mutations
 
 ### `createContactFormAction(generateEmailHtml): ServerAction`
 
 Creates a Server Action for contact form submissions compatible with `useActionState`.
 
-**Architecture Pattern:**
-- This is a **factory function** that runs on the client
-- It takes a template generator function and returns a Server Action
-- The factory orchestrates the flow:
-  1. **Client-side**: Validates form data and generates HTML using the provided template function
-  2. **Server-side**: Passes validated data and generated HTML to a server function for database storage and email sending
-- This pattern separates concerns: templating (client) from server operations (database, email)
+**Parameters**:
+- `generateEmailHtml: (data: ContactFormData) => string` - Function that generates the HTML email template from validated form data
 
-- **Parameters**:
-  - `generateEmailHtml: (data: ValidatedContactData) => string` - Function that generates the HTML email template from validated form data
-    - Called on the client-side with validated form data
-    - Must return an HTML string (not a function)
-    - Data object contains:
-      - `data.name: string` - Sender's name
-      - `data.email: string` - Sender's email
-      - `data.phone?: string` - Sender's phone (optional)
-      - `data.subject: string` - Message subject
-      - `data.message: string` - Message content
+**Architecture**:
+- This is a factory function that produces a Server Action
+- To use it, create your own server-side file that imports the factory, calls it with your template function, and exports the resulting server action
+- The frontend component then imports and uses that exported server action with `useActionState`
 
-- **Validation Schema**: `contactFormSchema` from `mutations/schema.ts`
-  - Use this schema for frontend form validation
-  - The schema is exported and can be imported in client components
-  - Validation happens on the client before calling the server
+**Server-side Processing**:
+The server-side function (`submitContactForm`) handles:
+1. Validates form data using `contactFormSchema` from `mutations/schema.ts`
+2. Calls the template generator to produce HTML email content
+3. Fetches the recipient email from the Contact global
+4. Saves the contact message to the database
+5. Sends the email with the generated HTML
 
-- **Email Configuration**: Contact form submissions are sent to the email configured in the Contact global (`email` field). This field must be set in the admin panel for contact form submissions to work.
+**Validation Schema**: `contactFormSchema` from `mutations/schema.ts`
+- Validates:
+  - `name` - string, 1-100 characters, required
+  - `email` - valid email address, required
+  - `phone` - string, optional
+  - `subject` - string, 1-200 characters, required
+  - `message` - string, 1-5000 characters, required
 
-- **Returns**: Server Action compatible with `useActionState`
-  - Returns `ContactFormState`:
-    - `success: boolean` - True if submitted successfully, false if validation or server errors
-    - `error?: string` - Error message on failure
-    - `fieldErrors?: Record<string, string[]>` - Per-field validation errors
+**Email Configuration**:
+- Contact form submissions are sent to the email configured in the Contact global (`email` field)
+- This must be set in the admin panel for form submissions to work
+
+**Returns**: Server Action compatible with `useActionState`
+- `success: boolean` - True if submitted successfully
+- `error?: string` - Error message on failure
+- `fieldErrors?: Record<string, string[]>` - Per-field validation errors
 
 ## UI Components to Create
 
@@ -60,15 +59,13 @@ Creates a Server Action for contact form submissions compatible with `useActionS
 
 **View**: Contact Page
 
-- **Purpose**: Display contact information and a contact form
+- **Purpose**: Display contact information and contact form
 - **Placement**: Dedicated page.
-- **Data Source**:
-  - `getContact()` (for contact info)
-  - `createContactFormAction` mutation (for form submission)
+- **Data Source**: `getContact()` and `createContactFormAction()`
 
 ## Data Display Guidelines
 
-### Contact Info (`Contact`)
+### Contact (`Contact`)
 
 - **`email`** (email): Contact email.
 - **`phone`** (text): Contact phone.

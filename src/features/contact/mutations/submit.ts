@@ -1,36 +1,63 @@
 "use server";
 
+import { z } from "zod";
 import { getPayload } from "payload";
 import configPromise from "@/src/payload.config";
-import { type ContactFormState } from "./schema";
-
-export interface ValidatedContactData {
-  name: string;
-  email: string;
-  phone?: string;
-  subject: string;
-  message: string;
-}
+import {
+  contactFormSchema,
+  type ContactFormState,
+  type EmailTemplateGenerator,
+} from "./schema";
 
 /**
- * Server-only function that handles the actual submission of the contact form.
- * This function executes on the server and handles:
- * - Fetching the contact email from the Contact global
- * - Saving the contact message to the database
- * - Sending the email with the generated HTML template
+ * Server-side function that handles the complete contact form submission.
  *
- * @param validatedData - Pre-validated contact form data (from client)
- * @param emailHtml - Pre-generated email HTML template (from client)
+ * This function executes on the server and performs:
+ * 1. Validates form data using the Zod schema
+ * 2. Calls the template generator function to produce HTML
+ * 3. Fetches the recipient email from the Contact global
+ * 4. Saves the contact message to the database
+ * 5. Sends the email with the generated HTML
+ *
+ * @param formData - Raw FormData from the form submission
+ * @param generateEmailHtml - Template generator function that produces email HTML from validated data
  * @returns Result state with success/error information
  */
 export async function submitContactForm(
-  validatedData: ValidatedContactData,
-  emailHtml: string,
+  formData: FormData,
+  generateEmailHtml: EmailTemplateGenerator,
 ): Promise<ContactFormState> {
   try {
+    // 1. Extract and validate form data
+    const rawData = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone") || undefined,
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    const formValidation = contactFormSchema.safeParse(rawData);
+
+    if (!formValidation.success) {
+      const { fieldErrors, formErrors } = z.flattenError(formValidation.error);
+
+      return {
+        success: false,
+        error:
+          formErrors.length > 0 ? formErrors.join(", ") : "Validation failed",
+        fieldErrors,
+      };
+    }
+
+    const validatedData = formValidation.data;
+
+    // 2. Generate email HTML using the template generator
+    const emailHtml = generateEmailHtml(validatedData);
+
+    // 3. Fetch contact email from global configuration
     const payload = await getPayload({ config: configPromise });
 
-    // 1. Fetch contact global to get recipient email
     const contactGlobal = await payload.findGlobal({
       slug: "contact",
     });
@@ -43,8 +70,8 @@ export async function submitContactForm(
       );
     }
 
-    // 2. Save to database
-    const doc = await payload.create({
+    // 4. Save to database
+    await payload.create({
       collection: "contact-emails",
       data: {
         name: validatedData.name,
@@ -55,7 +82,7 @@ export async function submitContactForm(
       },
     });
 
-    // 3. Send email with generated HTML
+    // 5. Send email with generated HTML
     await payload.sendEmail({
       to: recipientEmail,
       subject: `New Contact: ${validatedData.subject}`,
