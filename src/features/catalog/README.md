@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Catalog feature manages catalog categories and items. It allows displaying a hierarchical catalog with categories and subcategories, and items with pricing, specifications, and galleries.
+The Catalog feature manages a hierarchical catalog system. Categories form a tree structure where each category can have a parent category and child subcategories. Items (products) are usually placed at leaf categories (categories without children), but can exist at any level. The feature supports browsing through the category hierarchy with breadcrumb navigation.
 
 ## Types
 
@@ -61,11 +61,14 @@ Get a single catalog category by slug.
 - **Placement**: Dedicated page.
 - **Data Source**: `getCatalogItem(slug)`
 
-**View**: Category List
+**View**: Category Detail
 
-- **Purpose**: List items in a specific category
+- **Purpose**: Display a category with breadcrumb navigation, subcategories (if any), and items (if any)
 - **Placement**: Dedicated page.
-- **Data Source**: `getCatalogItems({ category: slug })`
+- **Data Source**:
+  - `getCatalogCategory(slug)` - Get category details and parent for breadcrumbs
+  - `getCatalogSubCategories(slug)` - Get child categories for drilling down
+  - `getCatalogItems({ category: slug })` - Get items in this category (display only if items exist)
 
 ## Data Display Guidelines
 
@@ -86,6 +89,6 @@ Get a single catalog category by slug.
 - **`name`** (string): Category name.
 - **`description`** (textarea): Category description.
 - **`image`** (upload/Media): **CRITICAL**. MUST be displayed using Next.js `<Image>`. Check for existence and use `url`.
-- **`parent`** (relationship): Parent category (if subcategory).
+- **`parent`** (relationship): Parent category. Use this to build breadcrumb navigation by traversing up the hierarchy.
 - **`slug`** (string): URL slug.
 - **`order`** (number): Sort order.
