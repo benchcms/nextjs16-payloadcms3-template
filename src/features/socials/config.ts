@@ -1,4 +1,4 @@
-import { Feature } from "../config";
+import type { Feature } from "../types";
 import { Socials } from "./globals/Socials";
 import { seedSocials } from "./seed/socials";
 

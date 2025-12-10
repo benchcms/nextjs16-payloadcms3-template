@@ -1,4 +1,4 @@
-import { Feature } from "../config";
+import type { Feature } from "../types";
 import { seedJobOffers } from "./seed/jobOffers";
 import { JobOffers } from "./collections/JobOffers";
 

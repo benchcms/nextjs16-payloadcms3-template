@@ -1,4 +1,4 @@
-import { CollectionConfig, GlobalConfig, Payload } from "payload";
+import type { Feature } from "./types";
 import { faqConfig } from "./faq/config";
 import { newsConfig } from "./news/config";
 import { blogConfig } from "./blog/config";
@@ -12,14 +12,6 @@ import { testimonialsConfig } from "./testimonials/config";
 import { openingHoursConfig } from "./opening-hours/config";
 import { pressReleasesConfig } from "./press-releases/config";
 import { restaurantMenuConfig } from "./restaurant-menu/config";
-
-type Seed = (payload: Payload) => Promise<void>;
-
-export type Feature = {
-  globals: GlobalConfig[];
-  collections: CollectionConfig[];
-  seeds: Seed[];
-};
 
 const features: Feature[] = [
   faqConfig,

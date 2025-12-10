@@ -1,4 +1,4 @@
-import { Feature } from "../config";
+import type { Feature } from "../types";
 import { seedEvents } from "./seed/events";
 import { Events } from "./collections/Events";
 
