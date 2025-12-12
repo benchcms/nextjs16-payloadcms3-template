@@ -53,7 +53,7 @@ async function runDbSync() {
 
     // 3. Create new migration
     console.log(chalk.yellow("\n3. Generating new migration..."));
-    runCommand("npx payload migrate:create initial_schema");
+    runCommand("npx payload migrate:create");
 
     // 4. Apply migrations
     console.log(chalk.yellow("\n4. Applying migrations..."));
