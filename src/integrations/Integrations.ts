@@ -1,5 +1,5 @@
 import { GlobalConfig, Field } from "payload";
-import { activeIntegrations } from "./config";
+import { integrations } from "./config";
 import i18n from "./i18n.json";
 
 export const Integrations: GlobalConfig = {
@@ -8,7 +8,7 @@ export const Integrations: GlobalConfig = {
     read: ({ req: { user } }) => !!user,
   },
   label: i18n.label,
-  fields: activeIntegrations.map((integration) => ({
+  fields: integrations.map((integration) => ({
     name: integration.slug,
     type: "group",
     label: integration.label,
