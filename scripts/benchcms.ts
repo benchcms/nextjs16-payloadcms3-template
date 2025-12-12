@@ -2,6 +2,7 @@
 
 import { Command } from "commander";
 import { initCommand } from "./commands/init.js";
+import { dbSyncCommand } from "./commands/db-sync.js";
 import { seedCommand } from "./commands/seed.js";
 
 /**
@@ -35,6 +36,19 @@ program
   .action(async (context) => {
     try {
       await seedCommand.execute(context ? [context] : []);
+    } catch (error) {
+      console.error("Error:", error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+// Register the db:sync command
+program
+  .command("db:sync")
+  .description(dbSyncCommand.description)
+  .action(async () => {
+    try {
+      await dbSyncCommand.execute([]);
     } catch (error) {
       console.error("Error:", error instanceof Error ? error.message : error);
       process.exit(1);
