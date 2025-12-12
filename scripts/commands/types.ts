@@ -10,5 +10,5 @@ export interface Command {
   /**
    * Execute the command with provided arguments
    */
-  execute: (args: string[]) => Promise<void>;
+  execute: (args: string[], options?: any) => Promise<void>;
 }

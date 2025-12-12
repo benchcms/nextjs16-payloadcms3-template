@@ -4,6 +4,8 @@ import { Command } from "commander";
 import { initCommand } from "./commands/init.js";
 import { dbSyncCommand } from "./commands/db-sync.js";
 import { seedCommand } from "./commands/seed.js";
+import { addCommand } from "./commands/add.js";
+import { integrateCommand } from "./commands/integrate.js";
 
 /**
  * BenchCMS CLI - Management script for BenchCMS operations
@@ -49,6 +51,34 @@ program
   .action(async () => {
     try {
       await dbSyncCommand.execute([]);
+    } catch (error) {
+      console.error("Error:", error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+// Register the add command
+program
+  .command("add <name>")
+  .description("Add a feature (benchcms add <name>)")
+  .option("-r, --repo <repo>", "Source repository (owner/repo)")
+  .action(async (name, options) => {
+    try {
+      await addCommand.execute([name], options);
+    } catch (error) {
+      console.error("Error:", error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
+  });
+
+// Register the integrate command
+program
+  .command("integrate <name>")
+  .description(integrateCommand.description)
+  .option("-r, --repo <repo>", "Source repository (owner/repo)")
+  .action(async (name, options) => {
+    try {
+      await integrateCommand.execute([name], options);
     } catch (error) {
       console.error("Error:", error instanceof Error ? error.message : error);
       process.exit(1);
