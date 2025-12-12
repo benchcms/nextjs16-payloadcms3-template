@@ -20,6 +20,9 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@core/*": ["./src/core/*"],
+      "@features/*": ["./src/features/*"],
+      "@integrations/*": ["./src/integrations/*"],
       "@payload-config": ["./src/payload.config.ts"]
     }
   },

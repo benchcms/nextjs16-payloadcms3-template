@@ -1,5 +1,5 @@
 import { Payload } from "payload";
-import type { SeedContext } from "../../types";
+import type { SeedContext } from "@features/types";
 import { seedTeamDefault } from "./teamDefault";
 import { seedTeamRestaurant } from "./teamRestaurant";
 import { seedTeamTechCompany } from "./teamTechCompany";

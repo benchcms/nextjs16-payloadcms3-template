@@ -1,4 +1,4 @@
-import type { Feature } from "../types";
+import type { Feature } from "@features/types";
 import { seedPressReleases } from "./seed/pressReleases";
 import { PressReleases } from "./collections/PressReleases";
 

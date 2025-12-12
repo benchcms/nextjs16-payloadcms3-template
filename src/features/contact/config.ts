@@ -1,4 +1,4 @@
-import type { Feature } from "../types";
+import type { Feature } from "@features/types";
 import { ContactEmails } from "./collections/ContactEmails";
 import { Contact } from "./globals/Contact";
 import { seedContact } from "./seed/contact";
