@@ -1,1 +1,1 @@
-export const integrations: any[] = [];
+export const integrations = [];
