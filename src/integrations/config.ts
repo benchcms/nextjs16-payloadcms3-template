@@ -1,1 +1,3 @@
-export const integrations = [];
+import { Integration } from "./types";
+
+export const integrations: Integration[] = [];

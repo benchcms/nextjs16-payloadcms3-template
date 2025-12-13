@@ -98,11 +98,14 @@ export function regenerateIntegrationsConfig() {
 
   const content =
     integrationsFileList.length === 0
-      ? `export const integrations = [];
-`
-      : `${imports}
+      ? `import { Integration } from "./types";
 
-export const integrations = [
+export const integrations: Integration[] = [];
+`
+      : `import { Integration } from "./types";
+${imports}
+
+export const integrations: Integration[] = [
 ${arrayItems}
 ];
 `;
