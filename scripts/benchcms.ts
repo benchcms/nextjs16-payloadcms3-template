@@ -49,12 +49,12 @@ program
 // --- Features Command Group ---
 
 program
-  .command("features:add <name>")
-  .description("Add a feature from the remote repository")
+  .command("features:add <names...>")
+  .description("Add features from the remote repository")
   .option("-r, --repo <repo>", "Source repository (owner/repo)")
-  .action(async (name, options) => {
+  .action(async (names, options) => {
     const { featuresCommand } = await import("./commands/features.js");
-    await featuresCommand.add.execute([name], options);
+    await featuresCommand.add.execute(names, options);
   });
 
 program
@@ -76,12 +76,12 @@ program
 // --- Integrations Command Group ---
 
 program
-  .command("integrations:add <name>")
-  .description("Add an integration from the remote repository")
+  .command("integrations:add <names...>")
+  .description("Add integrations from the remote repository")
   .option("-r, --repo <repo>", "Source repository (owner/repo)")
-  .action(async (name, options) => {
+  .action(async (names, options) => {
     const { integrationsCommand } = await import("./commands/integrations.js");
-    await integrationsCommand.add.execute([name], options);
+    await integrationsCommand.add.execute(names, options);
   });
 
 program
@@ -104,12 +104,12 @@ program
 
 // add -> features:add
 program
-  .command("add <name>")
+  .command("add <names...>")
   .description("Alias for features:add")
   .option("-r, --repo <repo>", "Source repository (owner/repo)")
-  .action(async (name, options) => {
+  .action(async (names, options) => {
     const { featuresCommand } = await import("./commands/features.js");
-    await featuresCommand.add.execute([name], options);
+    await featuresCommand.add.execute(names, options);
   });
 
 // rm -> features:rm

@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { installModule, uninstallModule } from "../utils/module-operations.js";
+import { installModules, uninstallModule } from "../utils/module-operations.js";
 import { regenerateFeaturesConfig } from "../utils/config-updater.js";
 
 const DEFAULT_REPO_OWNER = "benchcms";
@@ -7,16 +7,15 @@ const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-features";
 
 export const featuresCommand = {
   add: {
-    description: "Add a feature from the remote repository",
+    description: "Add features from the remote repository",
     execute: async (args: string[], options?: any) => {
       if (args.length < 1) {
         console.log(
-          chalk.red("Usage: benchcms features:add <feature-name> [options]"),
+          chalk.red("Usage: benchcms features:add <feature-name...> [options]"),
         );
         process.exit(1);
       }
 
-      const featureName = args[0];
       let repoOwner = DEFAULT_REPO_OWNER;
       let repoName = DEFAULT_REPO_NAME;
 
@@ -35,7 +34,7 @@ export const featuresCommand = {
       }
 
       try {
-        await installModule("feature", featureName, { repoOwner, repoName });
+        await installModules("feature", args, { repoOwner, repoName });
 
         console.log(chalk.blue(`\n📝 Regenerating features config...`));
         regenerateFeaturesConfig();

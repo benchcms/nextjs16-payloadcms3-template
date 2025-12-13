@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { installModule, uninstallModule } from "../utils/module-operations.js";
+import { installModules, uninstallModule } from "../utils/module-operations.js";
 import { regenerateIntegrationsConfig } from "../utils/config-updater.js";
 
 const DEFAULT_REPO_OWNER = "benchcms";
@@ -7,18 +7,17 @@ const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-integrations";
 
 export const integrationsCommand = {
   add: {
-    description: "Add an integration from the remote repository",
+    description: "Add integrations from the remote repository",
     execute: async (args: string[], options?: any) => {
       if (args.length < 1) {
         console.log(
           chalk.red(
-            "Usage: benchcms integrations:add <integration-name> [options]",
+            "Usage: benchcms integrations:add <integration-name...> [options]",
           ),
         );
         process.exit(1);
       }
 
-      const integrationName = args[0];
       let repoOwner = DEFAULT_REPO_OWNER;
       let repoName = DEFAULT_REPO_NAME;
 
@@ -37,10 +36,7 @@ export const integrationsCommand = {
       }
 
       try {
-        await installModule("integration", integrationName, {
-          repoOwner,
-          repoName,
-        });
+        await installModules("integration", args, { repoOwner, repoName });
 
         console.log(chalk.blue(`\n📝 Regenerating integrations config...`));
         regenerateIntegrationsConfig();

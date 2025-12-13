@@ -17,23 +17,32 @@ interface DownloadOptions {
   repoOwner: string;
   repoName: string;
   branch?: string;
-  componentPath: string; // Path within the repo, e.g., "features/events" or just "events" if at root?
+}
+
+interface ComponentMapping {
+  /** Path within the repo (e.g., "events" or "google-analytics") */
+  componentPath: string;
+  /** Target directory on the local filesystem */
   targetDir: string;
 }
 
 /**
- * Downloads a specific folder from a GitHub repository.
- * Robust implementation: Download tar -> Extract to temp -> Move component -> Cleanup
+ * Downloads multiple components from a GitHub repository in a single archive download.
+ * Downloads tar -> Extracts to temp -> Moves all components -> Cleanup
  */
-export async function downloadComponent({
-  repoOwner,
-  repoName,
-  branch = "master",
-  componentPath,
-  targetDir,
-}: DownloadOptions): Promise<void> {
-  if (existsSync(targetDir)) {
-    throw new Error(`Target directory already exists: ${targetDir}`);
+export async function downloadComponents(
+  { repoOwner, repoName, branch = "master" }: DownloadOptions,
+  components: ComponentMapping[],
+): Promise<void> {
+  if (components.length === 0) {
+    return;
+  }
+
+  // Check all target directories before starting
+  for (const { targetDir } of components) {
+    if (existsSync(targetDir)) {
+      throw new Error(`Target directory already exists: ${targetDir}`);
+    }
   }
 
   const url = `https://github.com/${repoOwner}/${repoName}/archive/refs/heads/${branch}.tar.gz`;
@@ -77,17 +86,22 @@ export async function downloadComponent({
       strip: 1, // Remove the root folder (repo-branch)
     });
 
-    // 3. Move the specific component folder to target
-    const sourcePath = join(tempDir, componentPath);
+    // 3. Move all component folders to their targets
+    for (const { componentPath, targetDir } of components) {
+      const sourcePath = join(tempDir, componentPath);
 
-    if (!existsSync(sourcePath)) {
-      throw new Error(`Component '${componentPath}' not found in repository.`);
+      if (!existsSync(sourcePath)) {
+        throw new Error(
+          `Component '${componentPath}' not found in repository.`,
+        );
+      }
+
+      // Ensure parent dir of target exists
+      mkdirSync(join(targetDir, ".."), { recursive: true });
+
+      renameSync(sourcePath, targetDir);
+      console.log(chalk.dim(`   Extracted: ${componentPath}`));
     }
-
-    // Ensure parent dir of target exists
-    mkdirSync(join(targetDir, ".."), { recursive: true });
-
-    renameSync(sourcePath, targetDir);
   } catch (error) {
     throw error;
   } finally {
@@ -100,4 +114,20 @@ export async function downloadComponent({
       console.warn("Failed to clean up temp directory:", cleanupError);
     }
   }
+}
+
+/**
+ * Downloads a specific folder from a GitHub repository.
+ * Convenience wrapper for single-component downloads.
+ */
+export async function downloadComponent({
+  repoOwner,
+  repoName,
+  branch = "master",
+  componentPath,
+  targetDir,
+}: DownloadOptions & ComponentMapping): Promise<void> {
+  await downloadComponents({ repoOwner, repoName, branch }, [
+    { componentPath, targetDir },
+  ]);
 }
