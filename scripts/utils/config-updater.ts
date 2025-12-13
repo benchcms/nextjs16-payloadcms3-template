@@ -33,12 +33,10 @@ export function regenerateFeaturesConfig() {
   });
 
   const imports = features
-    .map((f) => `import { ${toCamelCase(f)}Config } from "./${f}/config";`)
+    .map((f) => `import ${toCamelCase(f)} from "./${f}/config";`)
     .join("\n");
 
-  const arrayItems = features
-    .map((f) => `  ${toCamelCase(f)}Config,`)
-    .join("\n");
+  const arrayItems = features.map((f) => `  ${toCamelCase(f)},`).join("\n");
 
   const content =
     features.length === 0
@@ -91,7 +89,7 @@ export function regenerateIntegrationsConfig() {
   });
 
   const imports = integrationsFileList
-    .map((f) => `import { ${toCamelCase(f)} } from "./${f}/config";`)
+    .map((f) => `import ${toCamelCase(f)} from "./${f}/config";`)
     .join("\n");
 
   const arrayItems = integrationsFileList
