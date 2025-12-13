@@ -40,7 +40,17 @@ export function regenerateFeaturesConfig() {
     .map((f) => `  ${toCamelCase(f)}Config,`)
     .join("\n");
 
-  const content = `import type { Feature } from "./types";
+  const content =
+    features.length === 0
+      ? `import type { Feature } from "./types";
+
+const features: Feature[] = [];
+
+export const seeds = features.flatMap((f) => f.seeds);
+export const globals = features.flatMap((f) => f.globals);
+export const collections = features.flatMap((f) => f.collections);
+`
+      : `import type { Feature } from "./types";
 ${imports}
 
 const features: Feature[] = [
@@ -73,21 +83,26 @@ export function regenerateIntegrationsConfig() {
   }
 
   // Get all directories in src/integrations that have a config.ts
-  const integrations = readdirSync(integrationsDir).filter((file) => {
+  const integrationsFileList = readdirSync(integrationsDir).filter((file) => {
     const fullPath = join(integrationsDir, file);
     if (!statSync(fullPath).isDirectory()) return false;
     if (file.startsWith(".") || file === "test") return false;
     return existsSync(join(fullPath, "config.ts"));
   });
 
-  const imports = integrations
+  const imports = integrationsFileList
     .map((f) => `import { ${toCamelCase(f)} } from "./${f}/config";`)
     .join("\n");
 
-  const arrayItems = integrations.map((f) => `  ${toCamelCase(f)},`).join("\n");
+  const arrayItems = integrationsFileList
+    .map((f) => `  ${toCamelCase(f)},`)
+    .join("\n");
 
-  // Based on user snippet: export const integrations = [ ... ];
-  const content = `${imports}
+  const content =
+    integrationsFileList.length === 0
+      ? `export const integrations = [];
+`
+      : `${imports}
 
 export const integrations = [
 ${arrayItems}
@@ -97,7 +112,7 @@ ${arrayItems}
   writeFileSync(configFile, content, "utf-8");
   console.log(
     chalk.green(
-      `✔ Regenerated integrations config with ${integrations.length} integrations.`,
+      `✔ Regenerated integrations config with ${integrationsFileList.length} integrations.`,
     ),
   );
 }

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import chalk from "chalk";
 import { getPayload } from "payload";
-import { seeds } from "@/src/features/config";
+
 import type { SeedContext } from "@/src/features/types";
 import type { Command } from "./types.js";
 
@@ -12,6 +12,9 @@ async function runSeed(context: SeedContext) {
 
   const { default: configPromise } = await import("@/src/payload.config");
   const payload = await getPayload({ config: configPromise });
+
+  // Dynamic import of features config to avoid load-time errors if config is broken
+  const { seeds } = await import("@/src/features/config");
 
   try {
     for (const seed of seeds) {

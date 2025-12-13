@@ -1,11 +1,12 @@
 #!/usr/bin/env tsx
 
 import { Command } from "commander";
-import { initCommand } from "./commands/init.js";
-import { dbSyncCommand } from "./commands/db-sync.js";
-import { seedCommand } from "./commands/seed.js";
-import { addCommand } from "./commands/add.js";
-import { integrateCommand } from "./commands/integrate.js";
+
+import {
+  regenerateFeaturesConfig,
+  regenerateIntegrationsConfig,
+} from "./utils/config-updater.js";
+import chalk from "chalk";
 
 /**
  * BenchCMS CLI - Management script for BenchCMS operations
@@ -21,68 +22,114 @@ program
 // Register the init command
 program
   .command("init")
-  .description(initCommand.description)
+  .description("Initialize BenchCMS project")
   .action(async () => {
-    try {
-      await initCommand.execute([]);
-    } catch (error) {
-      console.error("Error:", error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
+    const { initCommand } = await import("./commands/init.js");
+    await initCommand.execute([]);
   });
 
 // Register the seed command
 program
   .command("db:seed [context]")
-  .description(seedCommand.description)
+  .description("Seed the database with initial data")
   .action(async (context) => {
-    try {
-      await seedCommand.execute(context ? [context] : []);
-    } catch (error) {
-      console.error("Error:", error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
+    const { seedCommand } = await import("./commands/seed.js");
+    await seedCommand.execute(context ? [context] : []);
   });
 
 // Register the db:sync command
 program
   .command("db:sync")
-  .description(dbSyncCommand.description)
+  .description("Reset DB, clear migrations, and clean install")
   .action(async () => {
-    try {
-      await dbSyncCommand.execute([]);
-    } catch (error) {
-      console.error("Error:", error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
+    const { dbSyncCommand } = await import("./commands/db-sync.js");
+    await dbSyncCommand.execute([]);
   });
 
-// Register the add command
+// --- Features Command Group ---
+
+program
+  .command("features:add <name>")
+  .description("Add a feature from the remote repository")
+  .option("-r, --repo <repo>", "Source repository (owner/repo)")
+  .action(async (name, options) => {
+    const { featuresCommand } = await import("./commands/features.js");
+    await featuresCommand.add.execute([name], options);
+  });
+
+program
+  .command("features:rm <name>")
+  .description("Remove a feature and update config")
+  .action(async (name) => {
+    const { featuresCommand } = await import("./commands/features.js");
+    await featuresCommand.rm.execute([name]);
+  });
+
+program
+  .command("features:sync")
+  .description("Regenerate features config")
+  .action(async () => {
+    const { featuresCommand } = await import("./commands/features.js");
+    await featuresCommand.sync.execute();
+  });
+
+// --- Integrations Command Group ---
+
+program
+  .command("integrations:add <name>")
+  .description("Add an integration from the remote repository")
+  .option("-r, --repo <repo>", "Source repository (owner/repo)")
+  .action(async (name, options) => {
+    const { integrationsCommand } = await import("./commands/integrations.js");
+    await integrationsCommand.add.execute([name], options);
+  });
+
+program
+  .command("integrations:rm <name>")
+  .description("Remove an integration and update config")
+  .action(async (name) => {
+    const { integrationsCommand } = await import("./commands/integrations.js");
+    await integrationsCommand.rm.execute([name]);
+  });
+
+program
+  .command("integrations:sync")
+  .description("Regenerate integrations config")
+  .action(async () => {
+    const { integrationsCommand } = await import("./commands/integrations.js");
+    await integrationsCommand.sync.execute();
+  });
+
+// --- Aliases ---
+
+// add -> features:add
 program
   .command("add <name>")
-  .description("Add a feature (benchcms add <name>)")
+  .description("Alias for features:add")
   .option("-r, --repo <repo>", "Source repository (owner/repo)")
   .action(async (name, options) => {
-    try {
-      await addCommand.execute([name], options);
-    } catch (error) {
-      console.error("Error:", error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
+    const { featuresCommand } = await import("./commands/features.js");
+    await featuresCommand.add.execute([name], options);
   });
 
-// Register the integrate command
+// rm -> features:rm
 program
-  .command("integrate <name>")
-  .description(integrateCommand.description)
-  .option("-r, --repo <repo>", "Source repository (owner/repo)")
-  .action(async (name, options) => {
-    try {
-      await integrateCommand.execute([name], options);
-    } catch (error) {
-      console.error("Error:", error instanceof Error ? error.message : error);
-      process.exit(1);
-    }
+  .command("rm <name>")
+  .description("Alias for features:rm")
+  .action(async (name) => {
+    const { featuresCommand } = await import("./commands/features.js");
+    await featuresCommand.rm.execute([name]);
+  });
+
+// sync -> features:sync AND integrations:sync
+program
+  .command("sync")
+  .description("Regenerate both features and integrations configs")
+  .action(async () => {
+    console.log(chalk.blue(`\n📝 Regenerating features config...`));
+    regenerateFeaturesConfig();
+    console.log(chalk.blue(`\n📝 Regenerating integrations config...`));
+    regenerateIntegrationsConfig();
   });
 
 program.parse(process.argv);
