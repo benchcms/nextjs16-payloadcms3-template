@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { join } from "path";
 import { execSync } from "child_process";
 import { rmSync, existsSync } from "fs";
