@@ -11,14 +11,13 @@ interface InstallOptions {
 // Mapping of module types to their repository folder paths
 const REPO_FOLDER_MAP = {
   feature: "features",
-  integration: "integrations",
 } as const;
 
 /**
  * Installs multiple modules of the same type from a repository in a single download.
  */
 export async function installModules(
-  type: "feature" | "integration",
+  type: keyof typeof REPO_FOLDER_MAP,
   names: string[],
   options: InstallOptions,
   logger: Logger,
@@ -57,7 +56,7 @@ export async function installModules(
  * Installs a single module. Convenience wrapper for installModules.
  */
 export async function installModule(
-  type: "feature" | "integration",
+  type: keyof typeof REPO_FOLDER_MAP,
   name: string,
   options: InstallOptions,
   logger: Logger,
@@ -66,7 +65,7 @@ export async function installModule(
 }
 
 export function uninstallModule(
-  type: "feature" | "integration",
+  type: keyof typeof REPO_FOLDER_MAP,
   name: string,
   logger: Logger,
 ) {

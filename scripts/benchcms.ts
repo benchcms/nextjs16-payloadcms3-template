@@ -68,33 +68,6 @@ program
     await syncFeatures(command.optsWithGlobals().verbose);
   });
 
-// --- Integrations Command Group ---
-
-program
-  .command("integrations:add <names...>")
-  .description("Add integrations from the remote repository")
-  .option("-r, --repo <repo>", "Source repository (owner/repo)")
-  .action(async (names, options, command) => {
-    const { addIntegrations } = await import("./commands/integrations.js");
-    await addIntegrations(names, options, command.optsWithGlobals().verbose);
-  });
-
-program
-  .command("integrations:rm <name>")
-  .description("Remove an integration and update config")
-  .action(async (name, options, command) => {
-    const { removeIntegration } = await import("./commands/integrations.js");
-    await removeIntegration(name, command.optsWithGlobals().verbose);
-  });
-
-program
-  .command("integrations:sync")
-  .description("Regenerate integrations config")
-  .action(async (options, command) => {
-    const { syncIntegrations } = await import("./commands/integrations.js");
-    await syncIntegrations(command.optsWithGlobals().verbose);
-  });
-
 // --- Aliases ---
 
 // add -> features:add
@@ -116,10 +89,10 @@ program
     await removeFeature(name, command.optsWithGlobals().verbose);
   });
 
-// sync -> features:sync AND integrations:sync
+// sync -> features:sync
 program
   .command("sync")
-  .description("Regenerate both features and integrations configs")
+  .description("Regenerate features config")
   .action(async (options, command) => {
     const { sync } = await import("./commands/sync.js");
     await sync(command.optsWithGlobals().verbose);
