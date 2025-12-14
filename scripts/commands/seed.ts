@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { seeds } from "@/src/features/config";
 import { createLogger } from "../logger.js";
-import type { SeedContext } from "@/src/features/types";
-import { getPayloadClient } from "@/src/core/utils/payload.js";
+import type { SeedContext } from "@core/types";
+import { getPayloadClient } from "@core/utils/payload.js";
 
 /**
  * Public API: Seed the database with initial data

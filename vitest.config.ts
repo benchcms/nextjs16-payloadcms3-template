@@ -11,8 +11,6 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "."),
       "@core": path.resolve(__dirname, "src/core"),
-      "@features": path.resolve(__dirname, "src/features"),
-      "@integrations": path.resolve(__dirname, "src/integrations"),
     },
   },
 });

@@ -45,7 +45,7 @@ export function regenerateFeaturesConfig(logger: Logger) {
 
   const content =
     features.length === 0
-      ? `import type { Feature } from "./types";
+      ? `import type { Feature } from "@core/types";
 
 const features: Feature[] = [];
 
@@ -53,7 +53,7 @@ export const seeds = features.flatMap((f) => f.seeds);
 export const globals = features.flatMap((f) => f.globals);
 export const collections = features.flatMap((f) => f.collections);
 `
-      : `import type { Feature } from "./types";
+      : `import type { Feature } from "@core/types";
 ${imports}
 
 const features: Feature[] = [
@@ -107,11 +107,11 @@ export function regenerateIntegrationsConfig(logger: Logger) {
 
   const content =
     integrationsFileList.length === 0
-      ? `import { Integration } from "./types";
+      ? `import type { Integration } from "@core/types";
 
 export const integrations: Integration[] = [];
 `
-      : `import { Integration } from "./types";
+      : `import type { Integration } from "@core/types";
 ${imports}
 
 export const integrations: Integration[] = [
