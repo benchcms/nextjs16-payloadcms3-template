@@ -1,4 +1,8 @@
+import { join } from "path";
+import { tmpdir } from "os";
 import { extract } from "tar";
+import { Readable } from "stream";
+import { pipeline } from "stream/promises";
 import {
   mkdirSync,
   existsSync,
@@ -7,11 +11,7 @@ import {
   mkdtempSync,
   createWriteStream,
 } from "fs";
-import { join } from "path";
-import { tmpdir } from "os";
-import { Readable } from "stream";
-import { pipeline } from "stream/promises";
-import chalk from "chalk";
+import type { Logger } from "../logger.js";
 
 interface DownloadOptions {
   repoOwner: string;
@@ -33,6 +33,7 @@ interface ComponentMapping {
 export async function downloadComponents(
   { repoOwner, repoName, branch = "master" }: DownloadOptions,
   components: ComponentMapping[],
+  logger: Logger,
 ): Promise<void> {
   if (components.length === 0) {
     return;
@@ -46,7 +47,7 @@ export async function downloadComponents(
   }
 
   const url = `https://github.com/${repoOwner}/${repoName}/archive/refs/heads/${branch}.tar.gz`;
-  console.log(chalk.dim(`Downloading from: ${url}`));
+  logger.debug(`Downloading from: ${url}`);
 
   // Create temp directory for extraction
   const tempDir = mkdtempSync(join(tmpdir(), "benchcms-"));
@@ -77,7 +78,7 @@ export async function downloadComponents(
       createWriteStream(tarPath),
     );
 
-    console.log(chalk.dim("   Download complete. Extracting..."));
+    logger.debug("Download complete. Extracting...");
 
     // 2. Extract tarball
     await extract({
@@ -100,7 +101,7 @@ export async function downloadComponents(
       mkdirSync(join(targetDir, ".."), { recursive: true });
 
       renameSync(sourcePath, targetDir);
-      console.log(chalk.dim(`   Extracted: ${componentPath}`));
+      logger.debug(`Extracted: ${componentPath}`);
     }
   } catch (error) {
     throw error;
@@ -120,14 +121,19 @@ export async function downloadComponents(
  * Downloads a specific folder from a GitHub repository.
  * Convenience wrapper for single-component downloads.
  */
-export async function downloadComponent({
-  repoOwner,
-  repoName,
-  branch = "master",
-  componentPath,
-  targetDir,
-}: DownloadOptions & ComponentMapping): Promise<void> {
-  await downloadComponents({ repoOwner, repoName, branch }, [
-    { componentPath, targetDir },
-  ]);
+export async function downloadComponent(
+  {
+    repoOwner,
+    repoName,
+    branch = "master",
+    componentPath,
+    targetDir,
+  }: DownloadOptions & ComponentMapping,
+  logger: Logger,
+): Promise<void> {
+  await downloadComponents(
+    { repoOwner, repoName, branch },
+    [{ componentPath, targetDir }],
+    logger,
+  );
 }

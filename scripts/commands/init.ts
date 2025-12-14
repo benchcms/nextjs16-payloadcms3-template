@@ -1,9 +1,7 @@
-import { copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
-import ora from "ora";
-import chalk from "chalk";
 import { join } from "path";
 import { randomBytes } from "crypto";
-import type { Command } from "./types.js";
+import { createLogger } from "../logger.js";
+import { copyFileSync, existsSync, readFileSync, writeFileSync } from "fs";
 
 const PAYLOAD_SECRET_KEY = "PAYLOAD_SECRET";
 const SECRET_LENGTH = 32; // 32 bytes = 64 hex chars
@@ -11,48 +9,54 @@ const SECRET_LENGTH = 32; // 32 bytes = 64 hex chars
 /**
  * Generates a random secure secret
  */
-const generateSecret = (): string => {
+function _generateSecret(): string {
   return randomBytes(SECRET_LENGTH).toString("hex");
-};
+}
 
 /**
  * Handles the creation of the .env file from .env.example
  */
-const ensureEnvFile = (rootDir: string): boolean => {
+function _ensureEnvFile(
+  rootDir: string,
+  logger: ReturnType<typeof createLogger>,
+): boolean {
   const envExamplePath = join(rootDir, ".env.example");
   const envPath = join(rootDir, ".env");
 
   if (!existsSync(envExamplePath)) {
-    console.error(
-      chalk.red("❌ Error: .env.example file not found in the root directory."),
+    logger.error(
+      "❌ Error: .env.example file not found in the root directory.",
     );
     return false;
   }
 
   if (existsSync(envPath)) {
-    console.log(
-      chalk.yellow(
-        "⚠  .env file already exists, preserving existing configuration",
-      ),
+    logger.warn(
+      "⚠  .env file already exists, preserving existing configuration",
     );
     return true;
   }
 
-  const spinner = ora("Creating .env file from .env.example...").start();
+  const spinner = logger
+    .spinner("Creating .env file from .env.example...")
+    .start();
   try {
     copyFileSync(envExamplePath, envPath);
-    spinner.succeed(chalk.green("Created .env file"));
+    spinner.succeed("Created .env file");
     return true;
   } catch (error) {
-    spinner.fail(chalk.red("Failed to create .env file"));
+    spinner.fail("Failed to create .env file");
     throw error;
   }
-};
+}
 
 /**
  * Ensures PAYLOAD_SECRET is set in the .env file
  */
-const ensurePayloadSecret = (rootDir: string): void => {
+function _ensurePayloadSecret(
+  rootDir: string,
+  logger: ReturnType<typeof createLogger>,
+): void {
   const envPath = join(rootDir, ".env");
   let envContent = readFileSync(envPath, "utf-8");
 
@@ -65,8 +69,10 @@ const ensurePayloadSecret = (rootDir: string): void => {
     commentedSecretRegex.test(envContent) ||
     emptySecretRegex.test(envContent)
   ) {
-    const spinner = ora("Generating secure PAYLOAD_SECRET...").start();
-    const secret = generateSecret();
+    const spinner = logger
+      .spinner("Generating secure PAYLOAD_SECRET...")
+      .start();
+    const secret = _generateSecret();
     const replacement = `${PAYLOAD_SECRET_KEY}=${secret}`;
 
     if (commentedSecretRegex.test(envContent)) {
@@ -76,43 +82,30 @@ const ensurePayloadSecret = (rootDir: string): void => {
     }
 
     writeFileSync(envPath, envContent, "utf-8");
-    spinner.succeed(chalk.green("Generated PAYLOAD_SECRET"));
+    spinner.succeed("Generated PAYLOAD_SECRET");
   } else {
-    console.log(chalk.blue("ℹ  PAYLOAD_SECRET is already configured"));
+    logger.info("ℹ  PAYLOAD_SECRET is already configured");
   }
-};
+}
 
 /**
- * Internal initialization logic
+ * Public API: Initialize the project environment
  */
-export const runInit = async (): Promise<void> => {
+export async function init(verbose: boolean = false): Promise<void> {
+  const logger = createLogger(verbose);
   const rootDir = process.cwd();
 
-  console.log(chalk.bold.cyan("\n🚀 BenchCMS Initialization\n"));
+  logger.info("\n🚀 BenchCMS Initialization\n");
 
-  if (!ensureEnvFile(rootDir)) {
+  if (!_ensureEnvFile(rootDir, logger)) {
     return;
   }
 
   try {
-    ensurePayloadSecret(rootDir);
-    console.log(
-      chalk.bold.green("\n✨ Initialization complete! You are ready to go.\n"),
-    );
+    _ensurePayloadSecret(rootDir, logger);
+    logger.success("\n✨ Initialization complete! You are ready to go.\n");
   } catch (error) {
-    console.error(chalk.red("\n❌ Initialization failed with an error:"));
-    console.error(error);
+    logger.error("\n❌ Initialization failed with an error:", error);
     process.exit(1);
   }
-};
-
-/**
- * Init command - Initialize the project environment
- */
-export const initCommand: Command = {
-  description:
-    "Initialize the project environment (.env file with PAYLOAD_SECRET)",
-  execute: async () => {
-    await runInit();
-  },
-};
+}

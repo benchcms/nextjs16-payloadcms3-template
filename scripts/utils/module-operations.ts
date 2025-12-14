@@ -1,6 +1,6 @@
 import { join } from "path";
 import { rmSync, existsSync } from "fs";
-import chalk from "chalk";
+import type { Logger } from "../logger.js";
 import { downloadComponents } from "./github-downloader.js";
 
 interface InstallOptions {
@@ -21,6 +21,7 @@ export async function installModules(
   type: "feature" | "integration",
   names: string[],
   options: InstallOptions,
+  logger: Logger,
 ) {
   if (names.length === 0) {
     return;
@@ -28,10 +29,8 @@ export async function installModules(
 
   const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
 
-  console.log(
-    chalk.blue(
-      `\n📦 Installing ${names.length} ${type}(s) from ${options.repoOwner}/${options.repoName}...\n`,
-    ),
+  logger.info(
+    `\n📦 Installing ${names.length} ${type}(s) from ${options.repoOwner}/${options.repoName}...`,
   );
 
   // Build component mappings
@@ -44,13 +43,12 @@ export async function installModules(
   await downloadComponents(
     { repoOwner: options.repoOwner, repoName: options.repoName },
     components,
+    logger,
   );
 
   for (const name of names) {
-    console.log(
-      chalk.green(
-        `✨ ${typeLabel} '${name}' installed to src/${type}s/${name}`,
-      ),
+    logger.success(
+      `✨ ${typeLabel} '${name}' installed to src/${type}s/${name}`,
     );
   }
 }
@@ -62,27 +60,28 @@ export async function installModule(
   type: "feature" | "integration",
   name: string,
   options: InstallOptions,
+  logger: Logger,
 ) {
-  await installModules(type, [name], options);
+  await installModules(type, [name], options, logger);
 }
 
-export function uninstallModule(type: "feature" | "integration", name: string) {
+export function uninstallModule(
+  type: "feature" | "integration",
+  name: string,
+  logger: Logger,
+) {
   const targetDir = join(process.cwd(), `src/${type}s`, name);
 
   if (!existsSync(targetDir)) {
-    console.warn(
-      chalk.yellow(`Warning: ${type} '${name}' does not exist at ${targetDir}`),
-    );
+    logger.warn(`Warning: ${type} '${name}' does not exist at ${targetDir}`);
     return;
   }
 
-  console.log(chalk.blue(`\n🗑️  Removing ${type} '${name}'...`));
+  logger.info(`\n🗑️  Removing ${type} '${name}'...`);
 
   rmSync(targetDir, { recursive: true, force: true });
 
-  console.log(
-    chalk.green(
-      `\n✨ ${type.charAt(0).toUpperCase() + type.slice(1)} '${name}' removed.`,
-    ),
+  logger.success(
+    `\n✨ ${type.charAt(0).toUpperCase() + type.slice(1)} '${name}' removed.`,
   );
 }

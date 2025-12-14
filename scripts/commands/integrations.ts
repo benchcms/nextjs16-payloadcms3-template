@@ -1,86 +1,100 @@
-import chalk from "chalk";
-import { installModules, uninstallModule } from "../utils/module-operations.js";
+import { createLogger, type Logger } from "../logger.js";
 import { regenerateIntegrationsConfig } from "../utils/config-updater.js";
+import { installModules, uninstallModule } from "../utils/module-operations.js";
 
 const DEFAULT_REPO_OWNER = "benchcms";
 const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-registry";
 
-export const integrationsCommand = {
-  add: {
-    description: "Add integrations from the remote repository",
-    execute: async (args: string[], options?: any) => {
-      if (args.length < 1) {
-        console.log(
-          chalk.red(
-            "Usage: benchcms integrations:add <integration-name...> [options]",
-          ),
-        );
-        process.exit(1);
-      }
+/**
+ * Parse repository option and return owner/name with fallback to defaults
+ */
+function _parseRepoOption(
+  repoOption: string | undefined,
+  logger: Logger,
+): { repoOwner: string; repoName: string } {
+  if (!repoOption) {
+    return { repoOwner: DEFAULT_REPO_OWNER, repoName: DEFAULT_REPO_NAME };
+  }
 
-      let repoOwner = DEFAULT_REPO_OWNER;
-      let repoName = DEFAULT_REPO_NAME;
+  const parts = repoOption.split("/");
+  if (parts.length === 2) {
+    return { repoOwner: parts[0], repoName: parts[1] };
+  }
 
-      if (options && options.repo) {
-        const parts = options.repo.split("/");
-        if (parts.length === 2) {
-          repoOwner = parts[0];
-          repoName = parts[1];
-        } else {
-          console.log(
-            chalk.yellow(
-              `Warning: Invalid repo format '${options.repo}'. Expected 'owner/repo'. Using default.`,
-            ),
-          );
-        }
-      }
+  logger.warn(
+    `Warning: Invalid repo format '${repoOption}'. Expected 'owner/repo'. Using default.`,
+  );
+  return { repoOwner: DEFAULT_REPO_OWNER, repoName: DEFAULT_REPO_NAME };
+}
 
-      try {
-        await installModules("integration", args, { repoOwner, repoName });
+/**
+ * Public API: Add integrations from the remote repository
+ */
+export async function addIntegrations(
+  names: string[],
+  options?: { repo?: string },
+  verbose: boolean = false,
+): Promise<void> {
+  const logger = createLogger(verbose);
 
-        console.log(chalk.blue(`\n📝 Regenerating integrations config...`));
-        regenerateIntegrationsConfig();
-      } catch (error) {
-        console.error(chalk.red("\n❌ Failed to add integration:"));
-        console.error(error instanceof Error ? error.message : error);
-        process.exit(1);
-      }
-    },
-  },
-  rm: {
-    description: "Remove an integration and update config",
-    execute: async (args: string[]) => {
-      if (args.length < 1) {
-        console.log(
-          chalk.red("Usage: benchcms integrations:rm <integration-name>"),
-        );
-        process.exit(1);
-      }
+  if (names.length < 1) {
+    logger.error(
+      "Usage: benchcms integrations:add <integration-name...> [options]",
+    );
+    process.exit(1);
+  }
 
-      const integrationName = args[0];
-      try {
-        uninstallModule("integration", integrationName);
+  const { repoOwner, repoName } = _parseRepoOption(options?.repo, logger);
 
-        console.log(chalk.blue(`\n📝 Regenerating integrations config...`));
-        regenerateIntegrationsConfig();
-      } catch (error) {
-        console.error(chalk.red("\n❌ Failed to remove integration:"));
-        console.error(error instanceof Error ? error.message : error);
-        process.exit(1);
-      }
-    },
-  },
-  sync: {
-    description: "Regenerate integrations config",
-    execute: async () => {
-      try {
-        console.log(chalk.blue(`\n📝 Regenerating integrations config...`));
-        regenerateIntegrationsConfig();
-      } catch (error) {
-        console.error(chalk.red("\n❌ Failed to sync integrations:"));
-        console.error(error instanceof Error ? error.message : error);
-        process.exit(1);
-      }
-    },
-  },
-};
+  try {
+    await installModules("integration", names, { repoOwner, repoName }, logger);
+
+    logger.info(`\n📝 Regenerating integrations config...`);
+    regenerateIntegrationsConfig(logger);
+  } catch (error) {
+    logger.error("\n❌ Failed to add integration:", error);
+    process.exit(1);
+  }
+}
+
+/**
+ * Public API: Remove an integration and update config
+ */
+export async function removeIntegration(
+  name: string,
+  verbose: boolean = false,
+): Promise<void> {
+  const logger = createLogger(verbose);
+
+  if (!name) {
+    logger.error("Usage: benchcms integrations:rm <integration-name>");
+    process.exit(1);
+  }
+
+  try {
+    uninstallModule("integration", name, logger);
+
+    logger.info(`\n📝 Regenerating integrations config...`);
+    regenerateIntegrationsConfig(logger);
+  } catch (error) {
+    logger.error("\n❌ Failed to remove integration:", error);
+    process.exit(1);
+  }
+}
+
+/**
+ * Public API: Regenerate integrations config
+ */
+export async function syncIntegrations(
+  verbose: boolean = false,
+): Promise<void> {
+  const logger = createLogger(verbose);
+
+  try {
+    logger.info(`\n📝 Regenerating integrations config...`);
+    regenerateIntegrationsConfig(logger);
+  } catch (error) {
+    logger.error("\n❌ Failed to sync integrations:", error);
+    process.exit(1);
+  }
+}

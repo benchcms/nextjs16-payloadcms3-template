@@ -1,34 +1,35 @@
 import "dotenv/config";
+import pg from "pg";
 import { join } from "path";
 import { execSync } from "child_process";
 import { rmSync, existsSync } from "fs";
-import pg from "pg";
-import chalk from "chalk";
-import type { Command } from "./types.js";
+import { createLogger } from "../logger.js";
 
 const { Client } = pg;
 
 /**
  * Execute a shell command and pipe output to parent process
  */
-const runCommand = (command: string) => {
-  console.log(chalk.dim(`> ${command}`));
+function _runCommand(command: string, logger: ReturnType<typeof createLogger>) {
+  logger.debug(`> ${command}`);
   execSync(command, { stdio: "inherit" });
-};
+}
 
-async function runDbSync() {
+/**
+ * Public API: Reset database, clear migrations, and clean install
+ */
+export async function syncDatabase(verbose: boolean = false): Promise<void> {
+  const logger = createLogger(verbose);
   const rootDir = process.cwd();
   const migrationsDir = join(rootDir, "migrations");
   const connectionString = process.env.DATABASE_URI;
 
   if (!connectionString) {
-    console.error(
-      chalk.red("❌ DATABASE_URI is not defined in environment variables."),
-    );
+    logger.error("❌ DATABASE_URI is not defined in environment variables.");
     process.exit(1);
   }
 
-  console.log(chalk.blue("\n🔄 Starting database sync (ROBUST MODE)...\n"));
+  logger.info("\n🔄 Starting database sync (ROBUST MODE)...\n");
 
   const client = new Client({
     connectionString,
@@ -36,38 +37,33 @@ async function runDbSync() {
 
   try {
     // 1. Wipe database (Drop and recreate public schema)
-    console.log(chalk.yellow("1. Wiping database..."));
+    logger.warn("1. Wiping database...");
     await client.connect();
     await client.query("DROP SCHEMA public CASCADE;");
     await client.query("CREATE SCHEMA public;");
     await client.end();
-    console.log(chalk.green("   ✔ Database wiped (public schema recreated)"));
+    logger.success("   ✔ Database wiped (public schema recreated)");
 
     // 2. Delete migrations folder
-    console.log(chalk.yellow("\n2. Clearing migrations folder..."));
+    logger.warn("\n2. Clearing migrations folder...");
     if (existsSync(migrationsDir)) {
       rmSync(migrationsDir, { recursive: true, force: true });
-      console.log(chalk.green("   ✔ Migrations folder deleted"));
+      logger.success("   ✔ Migrations folder deleted");
     } else {
-      console.log(chalk.dim("   ✔ No migrations folder to delete"));
+      logger.dim("   ✔ No migrations folder to delete");
     }
 
     // 3. Create new migration
-    console.log(chalk.yellow("\n3. Generating new migration..."));
-    runCommand("npx payload migrate:create");
+    logger.warn("\n3. Generating new migration...");
+    _runCommand("npx payload migrate:create", logger);
 
     // 4. Apply migrations
-    console.log(chalk.yellow("\n4. Applying migrations..."));
-    runCommand("npx payload migrate");
+    logger.warn("\n4. Applying migrations...");
+    _runCommand("npx payload migrate", logger);
 
-    console.log(
-      chalk.bold.green(
-        "\n✨ Database sync complete! Database is fresh and ready.",
-      ),
-    );
+    logger.success("\n✨ Database sync complete! Database is fresh and ready.");
   } catch (error) {
-    console.error(chalk.red("\n❌ Database sync failed:"));
-    console.error(error);
+    logger.error("\n❌ Database sync failed:", error);
     // Ensure client is closed on error
     try {
       await client.end();
@@ -75,11 +71,3 @@ async function runDbSync() {
     process.exit(1);
   }
 }
-
-export const dbSyncCommand: Command = {
-  description:
-    "Reset DB, clear migrations, and clean install (reset -> clean -> create -> migrate)",
-  execute: async () => {
-    await runDbSync();
-  },
-};

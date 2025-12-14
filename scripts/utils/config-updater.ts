@@ -1,6 +1,6 @@
-import { readdirSync, writeFileSync, statSync, existsSync } from "fs";
 import { join } from "path";
-import chalk from "chalk";
+import { readdirSync, writeFileSync, statSync, existsSync } from "fs";
+import type { Logger } from "../logger.js";
 
 /**
  * Convert string to camelCase
@@ -12,12 +12,12 @@ export function toCamelCase(str: string): string {
 /**
  * Regenerates the src/features/config.ts file based on subdirectories in src/features
  */
-export function regenerateFeaturesConfig() {
+export function regenerateFeaturesConfig(logger: Logger) {
   const featuresDir = join(process.cwd(), "src/features");
   const configFile = join(featuresDir, "config.ts");
 
   if (!existsSync(featuresDir)) {
-    console.warn(chalk.yellow(`Warning: ${featuresDir} does not exist.`));
+    logger.warn(`Warning: ${featuresDir} does not exist.`);
     return;
   }
 
@@ -31,6 +31,11 @@ export function regenerateFeaturesConfig() {
     // or strictly check for config.ts to avoid breaking import
     return existsSync(join(fullPath, "config.ts"));
   });
+
+  logger.debug(`Scanning ${featuresDir}...`);
+  logger.debug(
+    `Found ${features.length} features: ${features.join(", ") || "none"}`,
+  );
 
   const imports = features
     .map((f) => `import ${toCamelCase(f)} from "./${f}/config";`)
@@ -61,22 +66,21 @@ export const collections = features.flatMap((f) => f.collections);
 `;
 
   writeFileSync(configFile, content, "utf-8");
-  console.log(
-    chalk.green(
-      `✔ Regenerated features config with ${features.length} features.`,
-    ),
+  logger.debug(`Writing config to ${configFile}`);
+  logger.success(
+    `✔ Regenerated features config with ${features.length} features`,
   );
 }
 
 /**
  * Regenerates the src/integrations/config.ts file based on subdirectories in src/integrations
  */
-export function regenerateIntegrationsConfig() {
+export function regenerateIntegrationsConfig(logger: Logger) {
   const integrationsDir = join(process.cwd(), "src/integrations");
   const configFile = join(integrationsDir, "config.ts");
 
   if (!existsSync(integrationsDir)) {
-    console.warn(chalk.yellow(`Warning: ${integrationsDir} does not exist.`));
+    logger.warn(`Warning: ${integrationsDir} does not exist.`);
     return;
   }
 
@@ -87,6 +91,11 @@ export function regenerateIntegrationsConfig() {
     if (file.startsWith(".") || file === "test") return false;
     return existsSync(join(fullPath, "config.ts"));
   });
+
+  logger.debug(`Scanning ${integrationsDir}...`);
+  logger.debug(
+    `Found ${integrationsFileList.length} integrations: ${integrationsFileList.join(", ") || "none"}`,
+  );
 
   const imports = integrationsFileList
     .map((f) => `import ${toCamelCase(f)} from "./${f}/config";`)
@@ -111,9 +120,8 @@ ${arrayItems}
 `;
 
   writeFileSync(configFile, content, "utf-8");
-  console.log(
-    chalk.green(
-      `✔ Regenerated integrations config with ${integrationsFileList.length} integrations.`,
-    ),
+  logger.debug(`Writing config to ${configFile}`);
+  logger.success(
+    `✔ Regenerated integrations config with ${integrationsFileList.length} integrations`,
   );
 }

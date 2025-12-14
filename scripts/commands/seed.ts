@@ -1,39 +1,31 @@
 import "dotenv/config";
-import chalk from "chalk";
-import { getPayload } from "payload";
-
+import { seeds } from "@/src/features/config";
+import { createLogger } from "../logger.js";
 import type { SeedContext } from "@/src/features/types";
-import type { Command } from "./types.js";
+import { getPayloadClient } from "@/src/core/utils/payload.js";
 
-async function runSeed(context: SeedContext) {
-  console.log(
-    chalk.blue(`\n🌱 Starting database seed for context: ${context}...\n`),
-  );
+/**
+ * Public API: Seed the database with initial data
+ */
+export async function seedDatabase(
+  context: SeedContext = "default",
+  verbose: boolean = false,
+): Promise<void> {
+  const logger = createLogger(verbose);
 
-  const { default: configPromise } = await import("@/src/payload.config");
-  const payload = await getPayload({ config: configPromise });
+  logger.info(`\n🌱 Starting database seed for context: ${context}...\n`);
 
-  // Dynamic import of features config to avoid load-time errors if config is broken
-  const { seeds } = await import("@/src/features/config");
+  const payload = await getPayloadClient();
 
   try {
     for (const seed of seeds) {
       await seed(payload, context);
     }
 
-    console.log(chalk.green("\n🎉 Database seeded successfully!"));
+    logger.success("\n🎉 Database seeded successfully!");
     process.exit(0);
   } catch (error) {
-    console.error(chalk.red("\n❌ Seed failed:"), error);
+    logger.error("\n❌ Seed failed:", error);
     process.exit(1);
   }
 }
-
-export const seedCommand: Command = {
-  description: "Seed the database with initial data",
-  execute: async (args: string[]) => {
-    const contextArg = args[0];
-    const context: SeedContext = (contextArg as SeedContext) || "default";
-    await runSeed(context);
-  },
-};
