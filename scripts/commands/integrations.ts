@@ -3,7 +3,7 @@ import { installModules, uninstallModule } from "../utils/module-operations.js";
 import { regenerateIntegrationsConfig } from "../utils/config-updater.js";
 
 const DEFAULT_REPO_OWNER = "benchcms";
-const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-integrations";
+const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-registry";
 
 export const integrationsCommand = {
   add: {

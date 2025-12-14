@@ -8,6 +8,12 @@ interface InstallOptions {
   repoName: string;
 }
 
+// Mapping of module types to their repository folder paths
+const REPO_FOLDER_MAP = {
+  feature: "features",
+  integration: "integrations",
+} as const;
+
 /**
  * Installs multiple modules of the same type from a repository in a single download.
  */
@@ -29,8 +35,9 @@ export async function installModules(
   );
 
   // Build component mappings
+  const repoFolder = REPO_FOLDER_MAP[type];
   const components = names.map((name) => ({
-    componentPath: name,
+    componentPath: `${repoFolder}/${name}`,
     targetDir: join(process.cwd(), `src/${type}s`, name),
   }));
 

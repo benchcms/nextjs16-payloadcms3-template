@@ -3,7 +3,7 @@ import { installModules, uninstallModule } from "../utils/module-operations.js";
 import { regenerateFeaturesConfig } from "../utils/config-updater.js";
 
 const DEFAULT_REPO_OWNER = "benchcms";
-const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-features";
+const DEFAULT_REPO_NAME = "nextjs16-payloadcms3-registry";
 
 export const featuresCommand = {
   add: {
