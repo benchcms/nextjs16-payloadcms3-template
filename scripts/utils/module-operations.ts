@@ -29,7 +29,7 @@ export async function installModules(
   const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
 
   logger.info(
-    `\n📦 Installing ${names.length} ${type}(s) from ${options.repoOwner}/${options.repoName}...`,
+    `📦 Installing ${names.length} ${type}(s) from ${options.repoOwner}/${options.repoName}...`,
   );
 
   // Build component mappings
@@ -76,11 +76,11 @@ export function uninstallModule(
     return;
   }
 
-  logger.info(`\n🗑️  Removing ${type} '${name}'...`);
+  logger.info(`🗑️  Removing ${type} '${name}'...`);
 
   rmSync(targetDir, { recursive: true, force: true });
 
   logger.success(
-    `\n✨ ${type.charAt(0).toUpperCase() + type.slice(1)} '${name}' removed.`,
+    `✨ ${type.charAt(0).toUpperCase() + type.slice(1)} '${name}' removed.`,
   );
 }

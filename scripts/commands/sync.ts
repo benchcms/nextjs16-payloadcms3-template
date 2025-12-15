@@ -8,7 +8,7 @@ export async function sync(verbose: boolean = false): Promise<void> {
   const logger = createLogger(verbose);
 
   try {
-    logger.info(`\n📝 Regenerating features config...`);
+    logger.info("📝 Regenerating features config...");
     regenerateFeaturesConfig(logger);
 
     logger.success("\n✔ Sync complete");

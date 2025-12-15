@@ -49,7 +49,7 @@ export async function addFeatures(
   try {
     await installModules("feature", names, { repoOwner, repoName }, logger);
 
-    logger.info(`\n📝 Regenerating features config...`);
+    logger.info("\n📝 Regenerating features config...");
     regenerateFeaturesConfig(logger);
   } catch (error) {
     logger.error("\n❌ Failed to add feature:", error);
@@ -76,7 +76,7 @@ export async function removeFeatures(
       uninstallModule("feature", name, logger);
     }
 
-    logger.info(`\n📝 Regenerating features config...`);
+    logger.info("\n📝 Regenerating features config...");
     regenerateFeaturesConfig(logger);
   } catch (error) {
     logger.error("\n❌ Failed to remove feature:", error);
@@ -92,7 +92,7 @@ export async function clearFeatures(verbose: boolean = false): Promise<void> {
 
   try {
     const featuresDir = join(process.cwd(), "src/features");
-    logger.info(`\n🧹 Clearing all features from ${featuresDir}...`);
+    logger.info(`🧹 Clearing all features from ${featuresDir}...`);
 
     // Read all items in the features directory
     const items = readdirSync(featuresDir);
@@ -115,10 +115,10 @@ export async function clearFeatures(verbose: boolean = false): Promise<void> {
       uninstallModule("feature", featureDir, logger);
     }
 
-    logger.info(`\n📝 Regenerating features config...`);
+    logger.info("\n📝 Regenerating features config...");
     regenerateFeaturesConfig(logger);
 
-    logger.success(`\n✨ All features cleared successfully.`);
+    logger.success("\n✨ All features cleared successfully.");
   } catch (error) {
     logger.error("\n❌ Failed to clear features:", error);
     process.exit(1);
@@ -132,7 +132,7 @@ export async function syncFeatures(verbose: boolean = false): Promise<void> {
   const logger = createLogger(verbose);
 
   try {
-    logger.info(`\n📝 Regenerating features config...`);
+    logger.info("📝 Regenerating features config...");
     regenerateFeaturesConfig(logger);
   } catch (error) {
     logger.error("\n❌ Failed to sync features:", error);

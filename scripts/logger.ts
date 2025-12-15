@@ -44,9 +44,7 @@ export function createLogger(verbose: boolean = false): Logger {
     },
 
     dim(message: string): void {
-      if (verbose) {
-        console.log(chalk.dim(message));
-      }
+      console.log(chalk.dim(message));
     },
 
     spinner(message: string): Ora {

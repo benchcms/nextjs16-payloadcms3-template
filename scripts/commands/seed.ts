@@ -13,7 +13,7 @@ export async function seedDatabase(
 ): Promise<void> {
   const logger = createLogger(verbose);
 
-  logger.info(`\n🌱 Starting database seed for context: ${context}...\n`);
+  logger.info(`🌱 Starting database seed for context: ${context}...`);
 
   const payload = await getPayloadClient();
 

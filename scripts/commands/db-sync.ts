@@ -29,7 +29,7 @@ export async function syncDatabase(verbose: boolean = false): Promise<void> {
     process.exit(1);
   }
 
-  logger.info("\n🔄 Starting database sync (ROBUST MODE)...\n");
+  logger.info("🔄 Starting database sync...");
 
   const client = new Client({
     connectionString,
@@ -37,7 +37,7 @@ export async function syncDatabase(verbose: boolean = false): Promise<void> {
 
   try {
     // 1. Wipe database (Drop and recreate public schema)
-    logger.warn("1. Wiping database...");
+    logger.warn("\n1. Wiping database...");
     await client.connect();
     await client.query("DROP SCHEMA public CASCADE;");
     await client.query("CREATE SCHEMA public;");

@@ -95,7 +95,7 @@ export async function init(verbose: boolean = false): Promise<void> {
   const logger = createLogger(verbose);
   const rootDir = process.cwd();
 
-  logger.info("\n🚀 BenchCMS Initialization\n");
+  logger.info("🚀 BenchCMS Initialization");
 
   if (!_ensureEnvFile(rootDir, logger)) {
     return;
@@ -103,7 +103,7 @@ export async function init(verbose: boolean = false): Promise<void> {
 
   try {
     _ensurePayloadSecret(rootDir, logger);
-    logger.success("\n✨ Initialization complete! You are ready to go.\n");
+    logger.success("\n✨ Initialization complete! You are ready to go.");
   } catch (error) {
     logger.error("\n❌ Initialization failed with an error:", error);
     process.exit(1);
