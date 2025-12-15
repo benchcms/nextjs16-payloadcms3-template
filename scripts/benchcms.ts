@@ -53,11 +53,11 @@ program
   });
 
 program
-  .command("features:rm <name>")
-  .description("Remove a feature and update config")
-  .action(async (name, options, command) => {
-    const { removeFeature } = await import("./commands/features.js");
-    await removeFeature(name, command.optsWithGlobals().verbose);
+  .command("features:rm <names...>")
+  .description("Remove features and update config")
+  .action(async (names, options, command) => {
+    const { removeFeatures } = await import("./commands/features.js");
+    await removeFeatures(names, command.optsWithGlobals().verbose);
   });
 
 program
@@ -66,6 +66,14 @@ program
   .action(async (options, command) => {
     const { syncFeatures } = await import("./commands/features.js");
     await syncFeatures(command.optsWithGlobals().verbose);
+  });
+
+program
+  .command("features:clear")
+  .description("Remove all installed features and sync config")
+  .action(async (options, command) => {
+    const { clearFeatures } = await import("./commands/features.js");
+    await clearFeatures(command.optsWithGlobals().verbose);
   });
 
 // --- Aliases ---
@@ -82,11 +90,11 @@ program
 
 // rm -> features:rm
 program
-  .command("rm <name>")
+  .command("rm <names...>")
   .description("Alias for features:rm")
-  .action(async (name, options, command) => {
-    const { removeFeature } = await import("./commands/features.js");
-    await removeFeature(name, command.optsWithGlobals().verbose);
+  .action(async (names, options, command) => {
+    const { removeFeatures } = await import("./commands/features.js");
+    await removeFeatures(names, command.optsWithGlobals().verbose);
   });
 
 // sync -> features:sync
@@ -96,6 +104,15 @@ program
   .action(async (options, command) => {
     const { sync } = await import("./commands/sync.js");
     await sync(command.optsWithGlobals().verbose);
+  });
+
+// clear -> features:clear
+program
+  .command("clear")
+  .description("Alias for features:clear")
+  .action(async (options, command) => {
+    const { clearFeatures } = await import("./commands/features.js");
+    await clearFeatures(command.optsWithGlobals().verbose);
   });
 
 program.parse(process.argv);

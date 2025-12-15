@@ -1,3 +1,5 @@
+import { join } from "path";
+import { readdirSync, statSync } from "fs";
 import { createLogger, type Logger } from "../logger.js";
 import { regenerateFeaturesConfig } from "../utils/config-updater.js";
 import { installModules, uninstallModule } from "../utils/module-operations.js";
@@ -56,26 +58,69 @@ export async function addFeatures(
 }
 
 /**
- * Public API: Remove a feature and update config
+ * Public API: Remove features and update config
  */
-export async function removeFeature(
-  name: string,
+export async function removeFeatures(
+  names: string[],
   verbose: boolean = false,
 ): Promise<void> {
   const logger = createLogger(verbose);
 
-  if (!name) {
-    logger.error("Usage: benchcms features:rm <feature-name>");
+  if (names.length < 1) {
+    logger.error("Usage: benchcms features:rm <feature-name...>");
     process.exit(1);
   }
 
   try {
-    uninstallModule("feature", name, logger);
+    for (const name of names) {
+      uninstallModule("feature", name, logger);
+    }
 
     logger.info(`\n📝 Regenerating features config...`);
     regenerateFeaturesConfig(logger);
   } catch (error) {
     logger.error("\n❌ Failed to remove feature:", error);
+    process.exit(1);
+  }
+}
+
+/**
+ * Public API: Remove all installed features and sync config
+ */
+export async function clearFeatures(verbose: boolean = false): Promise<void> {
+  const logger = createLogger(verbose);
+
+  try {
+    const featuresDir = join(process.cwd(), "src/features");
+    logger.info(`\n🧹 Clearing all features from ${featuresDir}...`);
+
+    // Read all items in the features directory
+    const items = readdirSync(featuresDir);
+
+    // Filter to only directories (excluding files like config.ts, README.md)
+    const featureDirs = items.filter((item) => {
+      const itemPath = join(featuresDir, item);
+      return statSync(itemPath).isDirectory();
+    });
+
+    if (featureDirs.length === 0) {
+      logger.info("No features to clear.");
+      return;
+    }
+
+    logger.info(`Found ${featureDirs.length} feature(s) to remove...`);
+
+    // Remove each feature directory
+    for (const featureDir of featureDirs) {
+      uninstallModule("feature", featureDir, logger);
+    }
+
+    logger.info(`\n📝 Regenerating features config...`);
+    regenerateFeaturesConfig(logger);
+
+    logger.success(`\n✨ All features cleared successfully.`);
+  } catch (error) {
+    logger.error("\n❌ Failed to clear features:", error);
     process.exit(1);
   }
 }
